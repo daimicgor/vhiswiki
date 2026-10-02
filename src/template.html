@@ -1,0 +1,637 @@
+<title>vhiswiki 自願醫保百科</title>
+<meta name="description" content="vhiswiki：按年齡即時比較全港在售自願醫保（VHIS）計劃保費，數據來自政府開放數據。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+HK:wght@400;500;700&family=Noto+Serif+HK:wght@600;900&display=swap">
+<style>
+/* Layout: a ward-chart page. One 1080px column, sticky tab bar, graph-paper grid only behind the hero; premiums set in mono like a printed schedule. */
+:root{
+  --bg:#F4F6FA; --surface:#FFFFFF; --ink:#131A2B; --muted:#5A6378; --line:#D9DFEA; --line-soft:#E9EDF4;
+  --accent:#2446C7; --accent-ink:#FFFFFF; --accent-soft:#E3E8FA; --mark:#F6E88A; --mark-ink:#3B3406;
+  --good:#1C7A4E; --warn:#A5561B; --grid:rgba(36,70,199,.07);
+  --s1:#2446C7; --s2:#CF4E2A; --s3:#18876A; --s4:#9A4DB8;
+  --display:"Noto Serif HK","Songti TC","PMingLiU",serif;
+  --body:"Noto Sans HK","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1220; --surface:#151C2D; --ink:#E6EAF4; --muted:#98A1B7; --line:#28314A; --line-soft:#1D2538;
+  --accent:#8FA6FF; --accent-ink:#0D1220; --accent-soft:#1D2850; --mark:#5B5214; --mark-ink:#FFF4B8;
+  --good:#5CCB98; --warn:#F0A064; --grid:rgba(143,166,255,.07);
+  --s1:#8FA6FF; --s2:#FF8A66; --s3:#4FD1A8; --s4:#D39AF0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1220; --surface:#151C2D; --ink:#E6EAF4; --muted:#98A1B7; --line:#28314A; --line-soft:#1D2538;
+  --accent:#8FA6FF; --accent-ink:#0D1220; --accent-soft:#1D2850; --mark:#5B5214; --mark-ink:#FFF4B8;
+  --good:#5CCB98; --warn:#F0A064; --grid:rgba(143,166,255,.07);
+  --s1:#8FA6FF; --s2:#FF8A66; --s3:#4FD1A8; --s4:#D39AF0; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+section.page{scroll-margin-top:80px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65}
+a{color:var(--accent)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* header */
+header.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:20px;min-height:58px;flex-wrap:wrap}
+.brand{font-family:var(--mono);font-weight:600;font-size:18px;letter-spacing:-.02em;color:var(--ink);text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.brand b{color:var(--accent)}
+.brand small{font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.04em}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+nav.tabs a{padding:7px 12px;border-radius:6px;color:var(--muted);text-decoration:none;white-space:nowrap;font-weight:500;font-size:14px}
+nav.tabs a:hover{color:var(--ink);background:var(--line-soft)}
+nav.tabs a[aria-current="page"]{color:var(--accent);background:var(--accent-soft)}
+nav.tabs .cnt{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-size:11px;line-height:18px;text-align:center;font-family:var(--mono)}
+@media (max-width:640px){.bar .wrap{gap:4px;padding-block:8px}nav.tabs{margin-left:0;width:100%}}
+
+/* hero */
+.hero{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border-bottom:1px solid var(--line)}
+.hero .wrap{padding-block:40px 32px;display:grid;grid-template-columns:1.25fr 1fr;gap:32px;align-items:end}
+.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(30px,5vw,48px);line-height:1.15;margin:8px 0 12px;text-wrap:balance;letter-spacing:.01em}
+h1 em{font-style:normal;background:linear-gradient(transparent 58%,var(--mark) 58%);color:inherit}
+.lede{color:var(--muted);max-width:34em;margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.stats div{padding:14px 16px;border-left:1px solid var(--line)}
+.stats div:first-child{border-left:0}
+.stats b{display:block;font-family:var(--mono);font-size:26px;font-weight:600;line-height:1.1}
+.stats span{font-size:12px;color:var(--muted)}
+@media (max-width:760px){.hero .wrap{grid-template-columns:1fr;padding-block:28px 24px}}
+
+section.page{padding-block:28px 56px}
+h2{font-family:var(--display);font-weight:600;font-size:24px;margin:0 0 6px;text-wrap:balance}
+h3{font-size:16px;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 20px;max-width:46em}
+
+/* quote form */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.form{padding:18px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:16px 20px;align-items:end}
+.field label,.field .lbl{display:block;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em;margin-bottom:6px}
+.agebox{display:flex;align-items:center;gap:12px}
+.agebox input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+.agebox input[type=number]{width:64px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);font-family:var(--mono);font-size:16px;text-align:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--bg)}
+.seg button{border:0;background:transparent;padding:7px 14px;cursor:pointer;color:var(--muted);font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+select,.inp{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+.more{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px 20px;padding-top:14px;border-top:1px dashed var(--line);align-items:center}
+.more .field{min-width:150px;flex:1}
+.chk{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.chk input{accent-color:var(--accent)}
+@media (max-width:820px){.form{grid-template-columns:1fr 1fr}.form .field:first-child{grid-column:1/-1}}
+
+.resultbar{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin:22px 0 10px}
+.resultbar p{margin:0;color:var(--muted);font-size:14px}
+.resultbar strong{color:var(--ink)}
+
+/* results */
+.rows{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+.row{display:grid;grid-template-columns:44px minmax(0,1fr) 150px 116px;gap:14px;align-items:center;padding:13px 16px;border-top:1px solid var(--line-soft)}
+.row:first-child{border-top:0}
+.row.head{background:var(--line-soft);font-size:12px;color:var(--muted);letter-spacing:.06em;padding-block:8px}
+.rank{font-family:var(--mono);color:var(--muted);font-size:13px}
+.row.cheap .rank{color:var(--mark-ink);background:var(--mark);border-radius:4px;text-align:center;font-weight:600}
+.pname{min-width:0}
+.pname .co{font-size:12px;color:var(--muted);font-weight:500}
+.pname .nm{font-weight:700;line-height:1.35}
+.pname .lv{font-size:13px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tag{font-size:11px;padding:1px 7px;border-radius:4px;border:1px solid var(--line);color:var(--muted);font-family:var(--mono)}
+.tag.acc{border-color:transparent;background:var(--accent-soft);color:var(--accent);font-family:var(--body)}
+.tag.warn{color:var(--warn);border-color:currentColor;font-family:var(--body)}
+.price{text-align:right}
+.price b{font-family:var(--mono);font-size:19px;font-weight:600;display:block;line-height:1.2}
+.price span{font-size:12px;color:var(--muted)}
+.act{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:7px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:13px;font-weight:500;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08);color:var(--accent-ink)}
+.act a.btn{font-size:12px;color:var(--muted)}
+@media (max-width:680px){
+  .row{grid-template-columns:32px minmax(0,1fr) auto;grid-template-areas:"r n p" "r a a"}
+  .row.head{display:none}
+  .row .rank{grid-area:r;align-self:start;margin-top:3px}
+  .row .pname{grid-area:n}.row .price{grid-area:p;align-self:start}
+  .row .act{grid-area:a;flex-direction:row}
+}
+.loadmore{display:flex;justify-content:center;padding:16px}
+.empty{padding:32px;text-align:center;color:var(--muted)}
+.note{font-size:12.5px;color:var(--muted);margin-top:14px;max-width:60em}
+
+/* compare */
+.cmpgrid{display:grid;grid-template-columns:repeat(var(--n,2),minmax(0,1fr));gap:12px}
+.cmpcard{padding:16px;border-top:4px solid var(--c);min-width:0}
+.cmpcard .x{float:right;border:0;background:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1}
+.cmpcard dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:12px 0 0;font-size:13.5px}
+.cmpcard dt{color:var(--muted)}
+.cmpcard dd{margin:0;text-align:right;font-family:var(--mono)}
+.cmpcard dd.big{font-size:20px;font-weight:600}
+@media (max-width:760px){.cmpgrid{grid-template-columns:1fr}}
+.chartbox{margin-top:16px;padding:16px}
+.chartbox svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;margin-top:8px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;background:var(--c);vertical-align:middle;margin-right:6px}
+.scroll{overflow-x:auto}
+
+/* claim */
+.claim{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.claim{grid-template-columns:1fr}}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+table.bill{width:100%;border-collapse:collapse;font-size:14px}
+table.bill th{font-size:12px;color:var(--muted);font-weight:500;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.bill td{padding:6px 8px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+table.bill td.r,table.bill th.r{text-align:right}
+table.bill input{width:100%;min-width:74px;padding:5px 7px;border:1px solid var(--line);border-radius:5px;background:var(--bg);font-family:var(--mono);text-align:right}
+table.bill select{padding:5px 6px;font-size:13px}
+table.bill .lim{font-size:11.5px;color:var(--muted)}
+.sum{padding:20px}
+.sum .big{font-family:var(--mono);font-size:34px;font-weight:600;line-height:1.1}
+.bar2{height:14px;border-radius:7px;background:var(--line-soft);overflow:hidden;display:flex;margin:14px 0 8px}
+.bar2 span{display:block;height:100%}
+.sum dl{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin:16px 0 0}
+.sum dt{color:var(--muted)}.sum dd{margin:0;font-family:var(--mono);text-align:right}
+.sum dd.total{font-weight:600}
+.key{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle}
+
+/* guide */
+.guide{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);align-self:start;display:flex;flex-direction:column;gap:2px}
+.toc a{padding:6px 10px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:14px}
+.toc a:hover{background:var(--line-soft);color:var(--ink)}
+article{max-width:44em;padding-block:4px 28px;border-bottom:1px solid var(--line);margin-bottom:28px}
+article:last-child{border-bottom:0}
+article h3{font-family:var(--display);font-size:21px;font-weight:600;margin-bottom:10px;scroll-margin-top:90px}
+article p,article li{color:var(--ink)}
+article ul{padding-left:1.2em}
+.fact{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.fact div{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--surface)}
+.fact b{display:block;font-family:var(--mono);font-size:18px}
+.fact span{font-size:12.5px;color:var(--muted)}
+table.sched{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
+table.sched td,table.sched th{border:1px solid var(--line);padding:7px 10px;text-align:left}
+table.sched th{background:var(--line-soft);font-weight:500;font-size:13px}
+table.sched td.num{text-align:right;white-space:nowrap}
+@media (max-width:760px){.guide{grid-template-columns:1fr}.toc{position:static;flex-direction:row;flex-wrap:wrap}}
+
+/* agent strip + footer */
+.agent{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 24px;align-items:center;padding:20px}
+.agent .who{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+.agent h3{font-family:var(--display);font-size:19px;margin:2px 0 6px}
+.agent p{margin:0;color:var(--muted);font-size:14px}
+.agent .ctas{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.phone{font-family:var(--mono);font-size:15px;text-align:center}
+@media (max-width:640px){.agent{grid-template-columns:1fr}}
+footer{border-top:1px solid var(--line);padding-block:28px 40px;font-size:13px;color:var(--muted)}
+footer .wrap{display:grid;gap:10px}
+footer strong{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:6px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="bar"><div class="wrap">
+  <a class="brand" href="#quote"><span>vhis<b>wiki</b></span><small>自願醫保百科</small></a>
+  <nav class="tabs" aria-label="主要導覽">
+    <a href="#quote" data-tab="quote">保費比較</a>
+    <a href="#compare" data-tab="compare">並排比較<span class="cnt" id="cmpcnt" hidden>0</span></a>
+    <a href="#claim" data-tab="claim">賠償估算</a>
+    <a href="#guide" data-tab="guide">醫保知識</a>
+    <a href="#about" data-tab="about">關於本站</a>
+  </nav>
+</div></header>
+
+<div class="hero" id="hero"><div class="wrap">
+  <div>
+    <div class="eyebrow">香港自願醫保 · VHIS 保費資料庫</div>
+    <h1>同一個年齡，<em>全港醫保</em>一次過排好。</h1>
+    <p class="lede">輸入年齡、性別同吸煙習慣，即時按年繳保費由低至高排列所有在售計劃。數字直接取自衞生署自願醫保辦事處公開數據，每個計劃都附官方保費表連結。</p>
+  </div>
+  <div class="stats">
+    <div><b id="st-plans">—</b><span>在售計劃版本</span></div>
+    <div><b id="st-ins">—</b><span>保險公司</span></div>
+    <div><b id="st-date">—</b><span>最新改價生效</span></div>
+  </div>
+</div></div>
+
+<main>
+<!-- QUOTE -->
+<section class="page" id="quote" data-page><div class="wrap">
+  <div class="panel form" role="group" aria-label="報價條件">
+    <div class="field">
+      <label for="age">年齡（實際歲數）</label>
+      <div class="agebox"><input id="agerange" type="range" min="0" max="99" value="30" aria-label="年齡滑桿"><input id="age" type="number" min="0" max="99" value="30"></div>
+    </div>
+    <div class="field"><span class="lbl">性別</span>
+      <div class="seg" id="g"><button type="button" data-v="F" aria-pressed="true">女</button><button type="button" data-v="M" aria-pressed="false">男</button></div></div>
+    <div class="field"><span class="lbl">吸煙</span>
+      <div class="seg" id="s"><button type="button" data-v="N" aria-pressed="true">不吸煙</button><button type="button" data-v="Y" aria-pressed="false">吸煙</button></div></div>
+    <div class="field"><label for="ded">自付費</label>
+      <select id="ded">
+        <option value="all">全部</option>
+        <option value="0" selected>0 自付費</option>
+        <option value="low">HK$1 – 20,000</option>
+        <option value="mid">HK$20,001 – 50,000</option>
+        <option value="high">HK$50,001 或以上</option>
+        <option value="na">計劃名稱未列明自付費</option>
+      </select></div>
+    <div class="more">
+      <div class="field"><label for="type">計劃類別</label>
+        <select id="type"><option value="all">標準 + 靈活計劃</option><option value="S">只看標準計劃</option><option value="F">只看靈活計劃</option></select></div>
+      <div class="field"><label for="co">保險公司</label><select id="co"><option value="all">全部公司</option></select></div>
+      <div class="field"><label for="qtext">搜尋計劃名稱</label><input class="inp" id="qtext" type="search" placeholder="例如：智選、半私家"></div>
+      <label class="chk"><input type="checkbox" id="usd"> 包括美元計劃</label>
+      <label class="chk"><input type="checkbox" id="rider"> 包括附加保障</label>
+    </div>
+  </div>
+
+  <div class="resultbar"><p id="rsum"></p><p>年繳標準保費 · 未計保監局徵費</p></div>
+  <div class="rows" id="rows"></div>
+  <div class="loadmore" id="more" hidden><button class="btn" type="button" id="morebtn">顯示更多</button></div>
+  <p class="note">排序只按所選年齡嘅年繳標準保費，唔代表保障較好或較差。保險公司核保後可能加費或設不保事項，實際保費以保單文件為準。美元計劃以 US$1 = HK$7.8 換算作排序參考。「年齡計算方法」依各計劃保費表：部分計劃按下次生日年齡計，本站已自動換算。</p>
+</div></section>
+
+<!-- COMPARE -->
+<section class="page" id="compare" data-page hidden><div class="wrap">
+  <h2>並排比較</h2>
+  <p class="sub" id="cmpsub">喺「保費比較」撳「加入比較」，最多揀 4 個計劃。下面會列出由你而家嘅年齡起計嘅保費，同埋每個年齡嘅保費曲線。</p>
+  <div class="cmpgrid" id="cmpgrid"></div>
+  <div class="panel chartbox" id="chartbox" hidden>
+    <h3>保費隨年齡變化（現行保費表）</h3>
+    <div class="scroll"><svg id="chart" viewBox="0 0 900 360" role="img" aria-label="保費曲線"></svg></div>
+    <div class="legend" id="legend"></div>
+    <p class="note">曲線用現行保費表畫出，未計將來加價。醫療通脹下，實際保費通常會隨時間上調。</p>
+  </div>
+</div></section>
+
+<!-- CLAIM -->
+<section class="page" id="claim" data-page hidden><div class="wrap">
+  <h2>賠償估算</h2>
+  <p class="sub">用標準計劃嘅法定保障上限，估算一張住院單大約賠幾多、自己要付幾多。靈活計劃嘅上限只會高過或等於標準計劃，所以呢個數可以當作最低保障嘅參考。</p>
+  <div class="claim">
+    <div class="panel" style="padding:16px">
+      <div class="presets" id="presets"></div>
+      <div class="scroll"><table class="bill">
+        <thead><tr><th>項目</th><th class="r">醫院收費 (HK$)</th><th class="r">標準計劃賠償</th></tr></thead>
+        <tbody id="billbody"></tbody>
+      </table></div>
+      <p class="note">例子費用只作示範，並非任何醫院嘅實際收費。手術類別由保險公司按手術表釐定。</p>
+    </div>
+    <div class="panel sum" aria-live="polite">
+      <div class="eyebrow">估計賠償</div>
+      <div class="big" id="c-paid">—</div>
+      <div class="bar2" id="c-bar"></div>
+      <div style="font-size:13px;color:var(--muted)"><span class="key" style="background:var(--good)"></span>保險賠償 <span class="key" style="background:var(--warn);margin-left:12px"></span>自己支付</div>
+      <dl>
+        <dt>醫院總收費</dt><dd id="c-bill">—</dd>
+        <dt>各項上限後合資格賠償</dt><dd id="c-elig">—</dd>
+        <dt><label for="c-ded">減：自付費</label></dt><dd><input class="inp num" id="c-ded" type="number" min="0" step="1000" value="0" style="width:110px;text-align:right"></dd>
+        <dt>保險賠償</dt><dd class="total" id="c-paid2">—</dd>
+        <dt>自己支付</dt><dd class="total" id="c-self">—</dd>
+      </dl>
+      <p class="note">假設：費用屬醫療需要及合理及慣常水平、病症已過等候期、全年只此一次住院。未計預先已存在病症、病房級別升級等調整。</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- GUIDE -->
+<section class="page" id="guide" data-page hidden><div class="wrap">
+  <h2>醫保知識</h2>
+  <p class="sub">揀醫保之前最常問嘅幾個問題，用最少字講清楚。</p>
+  <div class="guide">
+    <nav class="toc" aria-label="文章目錄">
+      <a href="#g-basic" data-jump>自願醫保係咩</a>
+      <a href="#g-sf" data-jump>標準 vs 靈活計劃</a>
+      <a href="#g-sched" data-jump>標準計劃保障表</a>
+      <a href="#g-ded" data-jump>點揀自付費</a>
+      <a href="#g-age" data-jump>保費點樣隨年齡變</a>
+      <a href="#g-tax" data-jump>扣稅</a>
+      <a href="#g-pec" data-jump>預先已存在病症</a>
+      <a href="#g-rc" data-jump>合理及慣常收費</a>
+      <a href="#g-check" data-jump>投保前清單</a>
+    </nav>
+    <div id="articles">
+      <article><h3 id="g-basic">自願醫保係咩</h3>
+        <p>自願醫保計劃（VHIS）係政府推出嘅個人住院保險規管制度。保險公司嘅住院保險要符合一套最低要求，先可以成為「認可計劃」並提供扣稅資格。</p>
+        <div class="fact"><div><b>100 歲</b><span>保證續保至</span></div><div><b>無</b><span>終身賠償上限</span></div><div><b>公開</b><span>每個計劃保費表</span></div></div>
+        <p>所有認可計劃嘅保費表都要公開，所以本站可以將全部計劃放喺同一條尺上比較。保費本身唔受政府規管，由保險公司自行定價。</p>
+      </article>
+      <article><h3 id="g-sf">標準計劃 vs 靈活計劃</h3>
+        <p><strong>標準計劃</strong>：條款同保障上限全港統一，只有保費唔同。適合想要最基本保障、預算有限，或者已有公司醫保想做後備嘅人。</p>
+        <p><strong>靈活計劃</strong>：保障至少同標準計劃一樣，保險公司可以加高上限、加額外保障（例如全數賠償、海外治療、門診），亦可以設自付費降低保費。</p>
+        <p>同一個靈活計劃通常有多個版本（唔同自付費、房級、地區），喺本站每個版本都會分開列出，所以數目會多過「計劃」數目。</p>
+      </article>
+      <article><h3 id="g-sched">標準計劃保障表</h3>
+        <p>以下係標準計劃嘅保障上限，亦係所有靈活計劃必須達到嘅最低水平。</p>
+        <div class="scroll"><table class="sched">
+          <tr><th>保障項目</th><th>上限（港元）</th></tr>
+          <tr><td>病房及膳食</td><td class="num">每日 750，每年最多 180 日</td></tr>
+          <tr><td>雜項費用</td><td class="num">每年 14,000</td></tr>
+          <tr><td>主診醫生巡房</td><td class="num">每日 750，每年最多 180 日</td></tr>
+          <tr><td>專科醫生費</td><td class="num">每年 4,300</td></tr>
+          <tr><td>深切治療</td><td class="num">每日 3,500，每年最多 25 日</td></tr>
+          <tr><td>外科醫生費</td><td class="num">複雜 50,000 · 大型 25,000<br>中型 12,500 · 小型 5,000</td></tr>
+          <tr><td>麻醉科醫生費</td><td class="num">外科醫生費嘅 35%</td></tr>
+          <tr><td>手術室費用</td><td class="num">外科醫生費嘅 35%</td></tr>
+          <tr><td>訂明診斷成像測試</td><td class="num">每年 20,000（30% 共同保險）</td></tr>
+          <tr><td>訂明非手術癌症治療</td><td class="num">每年 80,000</td></tr>
+          <tr><td>入院前 / 出院後門診</td><td class="num">每次 580，每年 3,000</td></tr>
+          <tr><td>精神科治療</td><td class="num">每年 30,000</td></tr>
+          <tr><th>每年保障上限</th><th class="num">420,000</th></tr>
+        </table></div>
+        <p class="note">來源：自願醫保認可計劃保單範本（2022 年 7 月 1 日版本）。</p>
+      </article>
+      <article><h3 id="g-ded">點揀自付費</h3>
+        <p>自付費係每個保單年度自己先付嘅金額，超出部分先由保險賠。自付費越高，保費越平。</p>
+        <ul>
+          <li><strong>已有公司醫保</strong>：可以揀同公司醫保上限相近嘅自付費，由公司醫保「墊底」，個人計劃只負責大額支出。</li>
+          <li><strong>冇其他醫保</strong>：0 自付費最穩陣，但要考慮長遠保費負擔。</li>
+          <li><strong>準備退休</strong>：離職後公司醫保會終止，高自付費計劃喺嗰時可能變成缺口。部分計劃容許日後降低自付費，細節要睇條款。</li>
+        </ul>
+        <p>喺「保費比較」轉換自付費選項，就可以即時睇到同一年齡下保費相差幾多。</p>
+      </article>
+      <article><h3 id="g-age">保費點樣隨年齡變</h3>
+        <p>醫保保費按「投保時年齡」同「續保時年齡」逐年計，年紀越大越貴。幼兒期（0–3 歲）保費通常高過學童期，之後由 20 幾歲開始穩定上升，60 歲後升幅明顯加快。</p>
+        <p>除咗年齡，保險公司每年亦可能因醫療通脹整體調整保費表。所以揀計劃唔好只睇今年最平，要睇埋 60、70 歲時嘅保費水平。喺「並排比較」可以睇到每個計劃嘅完整曲線。</p>
+      </article>
+      <article><h3 id="g-tax">扣稅</h3>
+        <div class="fact"><div><b>HK$8,000</b><span>每名受保人每年扣稅上限</span></div><div><b>無上限</b><span>可申報受保人數目</span></div></div>
+        <p>納稅人為自己或指明親屬（配偶、子女、父母、祖父母、兄弟姊妹等）繳付嘅認可計劃保費，可以申請扣稅。只有認可計劃部分嘅保費合資格，附加保障部分未必計算在內，保險公司會喺繳費紀錄分開列明。</p>
+      </article>
+      <article><h3 id="g-pec">預先已存在病症</h3>
+        <p>投保時已知並已申報嘅病症，保險公司可以加費或設不保事項。投保時「唔知道」嘅預先已存在病症，認可計劃都要保障，但有等候期：</p>
+        <div class="fact"><div><b>0%</b><span>第 1 個保單年度</span></div><div><b>25%</b><span>第 2 個保單年度</span></div><div><b>50%</b><span>第 3 個保單年度</span></div><div><b>100%</b><span>第 4 年起</span></div></div>
+        <p>填健康申報時要如實披露，否則將來索償可能被拒。</p>
+      </article>
+      <article><h3 id="g-rc">合理及慣常收費</h3>
+        <p>保險賠償只限「醫療需要」及「合理及慣常」嘅收費。如果醫院或醫生收費明顯高過市場一般水平，超出部分可能唔獲賠償。入院前可以向保險公司申請預先批核，減少意外。</p>
+        <p>住高過保單指定級別嘅病房，部分計劃會按比例減少賠償，而唔只係房租差價，選房前要睇清條款。</p>
+      </article>
+      <article><h3 id="g-check">投保前清單</h3>
+        <ul>
+          <li>喺本站用自己年齡睇一次保費排名，再睇 60 歲同 70 歲時嘅保費</li>
+          <li>決定自付費：有冇公司醫保？幾時退休？</li>
+          <li>決定房級：普通房、半私家房定私家房</li>
+          <li>打開官方保費表同計劃文件核對（每個計劃都有連結）</li>
+          <li>如實填寫健康申報</li>
+          <li>收到保單後有冷靜期，可以取消並取回保費</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</div></section>
+
+<!-- ABOUT -->
+<section class="page" id="about" data-page hidden><div class="wrap">
+  <h2>關於 vhiswiki</h2>
+  <div class="guide" style="grid-template-columns:minmax(0,1fr)">
+    <article>
+      <h3>本站由誰營運</h3>
+      <p>vhiswiki 由 <strong>beezy</strong> 營運。beezy 係<strong>富衛人壽保險（百慕達）有限公司（FWD）</strong>委任嘅持牌保險代理，保險業監管局牌照號碼 <strong class="num">JA3466</strong>。作為 FWD 代理，beezy 只可以安排 FWD 嘅保單；如果你對其他公司嘅計劃有興趣，請向該公司或你信任嘅中介人查詢。</p>
+      <p>你可以喺保險業監管局網站嘅<a href="https://iir.ia.org.hk/" target="_blank" rel="noopener">持牌保險中介人登記冊</a>核實牌照。</p>
+    </article>
+    <article>
+      <h3>比較方法</h3>
+      <ul>
+        <li>所有保費取自 DATA.GOV.HK 上衞生署自願醫保辦事處公布嘅「自願醫保認可計劃標準保費」及「認可計劃名單」。</li>
+        <li>只列出目前接受新投保嘅認可計劃版本；只供續保、已撤銷或暫停嘅計劃不會顯示。</li>
+        <li>排序只按所選條件下嘅年繳標準保費，所有公司用同一套規則，排名不受任何保險公司影響。</li>
+        <li>保費為標準保費，未包括保監局徵費，亦未計核保加費或任何推廣優惠。</li>
+        <li>按下次生日計年齡嘅計劃，本站已換算為實際年齡；美元計劃以 US$1 = HK$7.8 換算作排序參考。</li>
+      </ul>
+      <p id="about-date"></p>
+    </article>
+    <article>
+      <h3>免責聲明</h3>
+      <p>本站內容只供一般參考，並非保險建議，亦不構成任何計劃嘅推薦或報價。投保前請細閱保險公司嘅計劃文件及保單條款，最終保費及保障以保險公司發出嘅文件為準。如發現資料有誤，歡迎透過 WhatsApp 通知我哋更正。</p>
+    </article>
+  </div>
+</div></section>
+
+<div class="wrap" style="padding-bottom:40px">
+  <div class="panel agent">
+    <div>
+      <div class="who">營運者披露 · FWD 持牌保險代理</div>
+      <h3>想了解 FWD 醫保或指出資料錯誤？</h3>
+      <p>beezy（保監局牌照 JA3466）係 FWD 委任嘅持牌保險代理。WhatsApp 查詢免費，毋須先填表。</p>
+    </div>
+    <div class="ctas">
+      <a class="btn primary" id="wa" href="https://wa.me/85293415321" target="_blank" rel="noopener">WhatsApp beezy</a>
+      <button type="button" class="btn phone" id="copyphone" title="複製電話號碼">9341 5321</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer><div class="wrap">
+  <div><strong>vhiswiki</strong> 由 beezy 營運。beezy 為富衛人壽保險（百慕達）有限公司（FWD）持牌保險代理，保監局牌照號碼 JA3466。</div>
+  <div>保費資料來源：<a href="https://data.gov.hk/tc-data/dataset/hk-hhb-hhbvhis-vhis-standard-premium" target="_blank" rel="noopener">DATA.GOV.HK · 自願醫保認可計劃標準保費</a>、<a href="https://www.vhis.gov.hk/" target="_blank" rel="noopener">自願醫保計劃網站</a>。「自願醫保」為香港特區政府計劃名稱，本站與政府或任何保險公司並無從屬關係。</div>
+  <div>本站內容只供參考，並非保險建議或報價。© 2026 vhiswiki</div>
+</div></footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script type="application/json" id="db">__DATA__</script>
+<script>
+(function(){
+const DB=JSON.parse(document.getElementById('db').textContent);
+const PLANS=DB.plans, META=DB.meta, FX=7.8, PAGE=30;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const fmt=n=>n==null?'—':Math.round(n).toLocaleString('en-US');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const byId={};PLANS.forEach(p=>byId[p.id]=p);
+const store={get(k,d){try{const v=localStorage.getItem('vw_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('vw_'+k,JSON.stringify(v))}catch(e){}}};
+
+const st={age:30,g:'F',s:'N',ded:'0',type:'all',co:'all',q:'',usd:false,rider:false,shown:PAGE,sel:store.get('sel',[]).filter(id=>byId[id]).slice(0,4)};
+
+// hero stats
+const d=META.latest;
+$('#st-plans').textContent=META.plans;$('#st-ins').textContent=META.insurers;
+$('#st-date').textContent=d.slice(0,4)+'.'+d.slice(4,6);
+$('#about-date').textContent='目前資料包括 '+META.plans+' 個在售計劃版本（'+META.families+' 個計劃系列，'+META.insurers+' 間保險公司），最新一次改價生效日期為 '+d.slice(0,4)+' 年 '+(+d.slice(4,6))+' 月 '+(+d.slice(6))+' 日。';
+
+// insurer list
+[...new Set(PLANS.map(p=>p.co))].sort((a,b)=>a.localeCompare(b,'zh-HK')).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;$('#co').appendChild(o)});
+
+function premAt(p,age,g,s){const t=p.p[(g||st.g)+(s||st.s)];if(!t)return null;const i=p.am==='N'?age+1:age;const v=t[i];return v==null?null:v}
+const toHKD=(p,v)=>v==null?null:(p.cur==='USD'?v*FX:v);
+function dedHKD(p){return p.ded==null?null:(p.dcur==='USD'?p.ded*FX:p.ded)}
+function dedOK(p){const x=dedHKD(p);switch(st.ded){case'all':return true;case'na':return x==null;case'0':return x===0;case'low':return x>0&&x<=20000;case'mid':return x>20000&&x<=50000;case'high':return x>50000}return true}
+function dedLabel(p){if(p.ded==null)return null;if(p.ded===0)return'0 自付費';return(p.dcur==='USD'?'US$':'HK$')+fmt(p.ded)+' 自付費'}
+const AM={A:'按實際年齡',N:'按下次生日',R:'按最近生日'};
+
+function results(){
+  const q=st.q.trim().toLowerCase();
+  const out=[];
+  for(const p of PLANS){
+    if(st.type!=='all'&&p.t!==st.type)continue;
+    if(st.co!=='all'&&p.co!==st.co)continue;
+    if(!st.usd&&p.cur==='USD')continue;
+    if(!st.rider&&p.b==='R')continue;
+    if(!dedOK(p))continue;
+    if(q&&!(p.n+p.lv+p.co+p.id).toLowerCase().includes(q))continue;
+    const v=premAt(p,st.age);if(v==null)continue;
+    out.push({p,v,h:toHKD(p,v)});
+  }
+  out.sort((a,b)=>a.h-b.h);return out;
+}
+
+function renderQuote(){
+  const r=results();
+  const gl=st.g==='F'?'女性':'男性',sl=st.s==='N'?'不吸煙':'吸煙';
+  $('#rsum').innerHTML='<strong>'+st.age+' 歲'+gl+' · '+sl+'</strong>：'+r.length+' 個計劃版本符合'+(r.length?'，最低 <strong class="num">HK$'+fmt(r[0].h)+'</strong>':'');
+  const rows=['<div class="row head"><span>#</span><span>計劃</span><span style="text-align:right">年繳保費</span><span></span></div>'];
+  if(!r.length)rows.push('<div class="empty">呢個年齡同條件下冇合適計劃。試下改用「全部」自付費，或者勾選「包括美元計劃」。</div>');
+  r.slice(0,st.shown).forEach((x,i)=>{
+    const p=x.p,on=st.sel.includes(p.id),dl=dedLabel(p);
+    const tags=['<span class="tag acc">'+(p.t==='S'?'標準計劃':'靈活計劃')+'</span>'];
+    if(dl)tags.push('<span class="tag acc">'+dl+'</span>');
+    if(p.b==='R')tags.push('<span class="tag warn">附加保障 · 須連基本計劃</span>');
+    tags.push('<span class="tag">'+p.id+'</span>');
+    const price=p.cur==='USD'?'<b>US$'+fmt(x.v)+'</b><span>約 HK$'+fmt(x.h)+'</span>':'<b>HK$'+fmt(x.v)+'</b><span>每年 · 約 $'+fmt(x.v/12)+'/月</span>';
+    rows.push('<div class="row'+(i===0?' cheap':'')+'"><span class="rank">'+(i+1)+'</span><div class="pname"><div class="co">'+esc(p.co)+'</div><div class="nm">'+esc(p.n)+'</div>'+(p.lv&&p.lv!=='標準計劃'?'<div class="lv">'+esc(p.lv)+'</div>':'')+'<div class="tags">'+tags.join('')+'</div></div><div class="price">'+price+'</div><div class="act"><button type="button" class="btn'+(on?' on':'')+'" data-add="'+p.id+'">'+(on?'✓ 已加入':'加入比較')+'</button><a class="btn" href="'+p.doc+'" target="_blank" rel="noopener">官方保費表</a></div></div>');
+  });
+  $('#rows').innerHTML=rows.join('');
+  $('#more').hidden=r.length<=st.shown;
+  $('#morebtn').textContent='顯示更多（尚餘 '+Math.max(0,r.length-st.shown)+' 個）';
+}
+
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1800)}
+function toggleSel(id){
+  const i=st.sel.indexOf(id);
+  if(i>=0)st.sel.splice(i,1);else{if(st.sel.length>=4){toast('最多比較 4 個計劃');return}st.sel.push(id);toast('已加入比較（'+st.sel.length+'/4）')}
+  store.set('sel',st.sel);renderQuote();renderCompare();
+}
+
+// compare
+const SC=['--s1','--s2','--s3','--s4'];
+function sumFrom(p,from,to){let t=0,last=from-1;for(let a=from;a<to;a++){const v=premAt(p,a);if(v==null)break;t+=toHKD(p,v);last=a}return{t,last}}
+function renderCompare(){
+  const n=st.sel.length;$('#cmpcnt').hidden=!n;$('#cmpcnt').textContent=n;
+  const g=$('#cmpgrid');g.style.setProperty('--n',Math.max(n,1));
+  if(!n){g.innerHTML='<div class="panel empty" style="grid-column:1/-1">未揀任何計劃。去 <a href="#quote">保費比較</a> 撳「加入比較」。</div>';$('#chartbox').hidden=true;return}
+  const gl=st.g==='F'?'女':'男',sl=st.s==='N'?'不吸煙':'吸煙';
+  $('#cmpsub').textContent='以 '+st.age+' 歲'+gl+'性、'+sl+'計算。改年齡或性別請返「保費比較」。';
+  g.innerHTML=st.sel.map((id,i)=>{
+    const p=byId[id],cur=p.cur==='USD'?'US$':'HK$';
+    const at=a=>{const v=premAt(p,a);return v==null?'—':cur+fmt(v)};
+    const s65=st.age<65?sumFrom(p,st.age,65):null, s85=st.age<85?sumFrom(p,st.age,85):null;
+    const sumTxt=s=>!s?'—':'HK$'+fmt(s.t)+(s.last<(s===s65?64:84)?'<br><small>數據只到 '+s.last+' 歲</small>':'');
+    const ages=[40,50,60,70,80].filter(a=>a>st.age);
+    return '<div class="panel cmpcard" style="--c:var('+SC[i]+')"><button class="x" type="button" data-add="'+id+'" aria-label="移除">×</button><div class="pname"><div class="co">'+esc(p.co)+'</div><div class="nm">'+esc(p.n)+'</div><div class="lv">'+esc(p.lv)+'</div></div><dl><dt>'+st.age+' 歲年繳</dt><dd class="big">'+at(st.age)+'</dd>'+ages.map(a=>'<dt>'+a+' 歲</dt><dd>'+at(a)+'</dd>').join('')+'<dt>累計至 65 歲</dt><dd>'+sumTxt(s65)+'</dd><dt>累計至 85 歲</dt><dd>'+sumTxt(s85)+'</dd><dt>自付費</dt><dd>'+(dedLabel(p)||'見計劃文件')+'</dd><dt>年齡計算</dt><dd style="font-family:var(--body)">'+AM[p.am]+'</dd><dt>保費生效</dt><dd>'+p.pd.slice(0,4)+'-'+p.pd.slice(4,6)+'-'+p.pd.slice(6)+'</dd></dl><div class="tags" style="margin-top:12px"><a class="btn" href="'+p.doc+'" target="_blank" rel="noopener">保費表</a><a class="btn" href="'+p.pdoc+'" target="_blank" rel="noopener">計劃文件</a></div></div>';
+  }).join('');
+  drawChart();
+}
+function drawChart(){
+  $('#chartbox').hidden=false;
+  const W=900,H=360,L=64,R=16,T=16,B=40,svg=$('#chart');
+  const series=st.sel.map((id,i)=>{const p=byId[id],pts=[];for(let a=0;a<=99;a++){const v=premAt(p,a);if(v!=null)pts.push([a,toHKD(p,v)])}return{p,pts,c:SC[i]}});
+  let max=0;series.forEach(s=>s.pts.forEach(q=>max=Math.max(max,q[1])));
+  const step=[5e3,1e4,2e4,5e4,1e5,2e5].find(x=>max/x<=6)||5e5;const top=Math.ceil(max/step)*step||step;
+  const x=a=>L+(W-L-R)*a/99,y=v=>T+(H-T-B)*(1-v/top);
+  let h='';
+  for(let v=0;v<=top;v+=step)h+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--line)" stroke-width="1"/><text x="'+(L-8)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">'+(v>=1000?(v/1000)+'k':v)+'</text>';
+  for(let a=0;a<=99;a+=10)h+='<text x="'+x(a)+'" y="'+(H-B+20)+'" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">'+a+'</text>';
+  h+='<text x="'+(W-R)+'" y="'+(H-4)+'" text-anchor="end" font-size="12" fill="var(--muted)">年齡</text>';
+  h+='<line x1="'+x(st.age)+'" x2="'+x(st.age)+'" y1="'+T+'" y2="'+(H-B)+'" stroke="var(--muted)" stroke-dasharray="4 4"/>';
+  series.forEach(s=>{if(!s.pts.length)return;h+='<polyline fill="none" stroke="var('+s.c+')" stroke-width="2.4" stroke-linejoin="round" points="'+s.pts.map(q=>x(q[0]).toFixed(1)+','+y(q[1]).toFixed(1)).join(' ')+'"/>';const m=s.pts.find(q=>q[0]===st.age);if(m)h+='<circle cx="'+x(m[0])+'" cy="'+y(m[1])+'" r="4.5" fill="var('+s.c+')" stroke="var(--surface)" stroke-width="2"/>'});
+  svg.innerHTML=h;
+  $('#legend').innerHTML=series.map(s=>'<span style="--c:var('+s.c+')"><i></i>'+esc(s.p.co+' · '+s.p.n)+(s.p.lv!=='標準計劃'?'（'+esc(s.p.lv)+'）':'')+'</span>').join('');
+}
+
+// claim estimator (Standard Plan limits)
+const SURG={complex:[50000,'複雜'],major:[25000,'大型'],inter:[12500,'中型'],minor:[5000,'小型'],none:[0,'冇手術']};
+const PRESETS=[
+  {k:'scope',n:'日間內窺鏡（切除瘜肉）',v:{days:0,room:0,doc:0,misc:6500,icud:0,icu:0,spec:0,cat:'minor',surg:9000,anae:3800,ot:5200,img:0}},
+  {k:'gb',n:'膽囊切除 · 住 3 晚',v:{days:3,room:2400,doc:1500,misc:26000,icud:0,icu:0,spec:0,cat:'major',surg:48000,anae:17000,ot:21000,img:6000}},
+  {k:'pneu',n:'肺炎 · 住 5 晚（無手術）',v:{days:5,room:1800,doc:1200,misc:16000,icud:0,icu:0,spec:3500,cat:'none',surg:0,anae:0,ot:0,img:4500}},
+];
+const cv=Object.assign({},PRESETS[1].v);let presetK='gb';
+function renderPresets(){$('#presets').innerHTML=PRESETS.map(p=>'<button type="button" class="btn'+(p.k===presetK?' on':'')+'" data-preset="'+p.k+'">'+p.n+'</button>').join('')}
+function billRows(){
+  const r=(id,label,lim,inp)=>'<tr><td>'+label+'<div class="lim">'+lim+'</div></td><td class="r">'+inp+'</td><td class="r num" id="pay-'+id+'">—</td></tr>';
+  const n=(k,step)=>'<input type="number" min="0" step="'+(step||100)+'" id="cv-'+k+'" data-cv="'+k+'" value="'+cv[k]+'" aria-label="'+k+'">';
+  $('#billbody').innerHTML=
+    r('days','住院日數','最多 180 日',n('days',1))+
+    r('room','病房及膳食（每日）','每日上限 750',n('room'))+
+    r('doc','主診醫生巡房（每日）','每日上限 750',n('doc'))+
+    r('misc','雜項費用（藥物、物料等）','每年上限 14,000',n('misc',500))+
+    r('icu','深切治療（每日）','每日上限 3,500 · 最多 25 日','<div style="display:flex;gap:6px">'+n('icud',1)+n('icu')+'</div>')+
+    r('spec','專科醫生費','每年上限 4,300',n('spec'))+
+    r('surg','外科醫生費','<select id="cv-cat" data-cv="cat" aria-label="手術類別">'+Object.entries(SURG).map(([k,v])=>'<option value="'+k+'"'+(k===cv.cat?' selected':'')+'>'+v[1]+(v[0]?' · 上限 '+fmt(v[0]):'')+'</option>').join('')+'</select>',n('surg',500))+
+    r('anae','麻醉科醫生費','外科賠償額 35%',n('anae',500))+
+    r('ot','手術室費用','外科賠償額 35%',n('ot',500))+
+    r('img','診斷成像（MRI、CT 等）','賠 70% · 每年上限 20,000',n('img',500));
+  $('#billbody tr:nth-child(5) input:first-child').setAttribute('aria-label','深切治療日數');
+}
+function calcClaim(){
+  const v=k=>Math.max(0,+cv[k]||0);
+  const days=Math.min(v('days'),180),icud=Math.min(v('icud'),25);
+  const surgPaid=Math.min(v('surg'),SURG[cv.cat][0]);
+  const pay={
+    days:null,
+    room:Math.min(v('room'),750)*days,
+    doc:Math.min(v('doc'),750)*days,
+    misc:Math.min(v('misc'),14000),
+    icu:Math.min(v('icu'),3500)*icud,
+    spec:Math.min(v('spec'),4300),
+    surg:surgPaid,
+    anae:Math.min(v('anae'),surgPaid*.35),
+    ot:Math.min(v('ot'),surgPaid*.35),
+    img:Math.min(v('img')*.7,20000)
+  };
+  const bill=v('room')*v('days')+v('doc')*v('days')+v('misc')+v('icu')*v('icud')+v('spec')+v('surg')+v('anae')+v('ot')+v('img');
+  let elig=0;for(const k in pay){if(pay[k]==null){$('#pay-'+k).textContent='';continue}elig+=pay[k];$('#pay-'+k).textContent=fmt(pay[k])}
+  elig=Math.min(elig,420000);
+  const ded=Math.max(0,+$('#c-ded').value||0),paid=Math.max(0,elig-ded),self=bill-paid;
+  $('#c-paid').textContent='HK$'+fmt(paid);$('#c-paid2').textContent='HK$'+fmt(paid);
+  $('#c-bill').textContent='HK$'+fmt(bill);$('#c-elig').textContent='HK$'+fmt(elig);$('#c-self').textContent='HK$'+fmt(self);
+  const pp=bill?paid/bill*100:0;
+  $('#c-bar').innerHTML='<span style="width:'+pp+'%;background:var(--good)"></span><span style="width:'+(100-pp)+'%;background:var(--warn)"></span>';
+}
+
+// routing
+function route(){
+  let t=(location.hash||'#quote').slice(1);
+  let anchor=null;
+  if(t.startsWith('g-')){anchor=t;t='guide'}
+  if(!$('#'+t)||!$('#'+t).hasAttribute('data-page'))t='quote';
+  $$('[data-page]').forEach(s=>s.hidden=s.id!==t);
+  $$('nav.tabs a').forEach(a=>a.setAttribute('aria-current',a.dataset.tab===t?'page':'false'));
+  $('#hero').hidden=t!=='quote';
+  setTimeout(()=>{if(anchor){const e=document.getElementById(anchor);if(e)e.scrollIntoView()}else window.scrollTo(0,0)},0);
+  if(t==='compare')renderCompare();
+}
+window.addEventListener('hashchange',route);
+
+// events
+function setAge(a){a=Math.max(0,Math.min(99,Math.round(+a||0)));st.age=a;$('#age').value=a;$('#agerange').value=a;st.shown=PAGE;renderQuote();store.set('age',a)}
+$('#agerange').addEventListener('input',e=>setAge(e.target.value));
+$('#age').addEventListener('change',e=>setAge(e.target.value));
+['g','s'].forEach(k=>$('#'+k).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;st[k]=b.dataset.v;$$('#'+k+' button').forEach(x=>x.setAttribute('aria-pressed',x===b));st.shown=PAGE;renderQuote();store.set(k,st[k])}));
+['ded','type','co'].forEach(k=>$('#'+k).addEventListener('change',e=>{st[k]=e.target.value;st.shown=PAGE;renderQuote()}));
+$('#qtext').addEventListener('input',e=>{st.q=e.target.value;st.shown=PAGE;renderQuote()});
+['usd','rider'].forEach(k=>$('#'+k).addEventListener('change',e=>{st[k]=e.target.checked;st.shown=PAGE;renderQuote()}));
+$('#morebtn').addEventListener('click',()=>{st.shown+=PAGE;renderQuote()});
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-add]');if(a){toggleSel(a.dataset.add);return}
+  const p=e.target.closest('[data-preset]');if(p){presetK=p.dataset.preset;Object.assign(cv,PRESETS.find(x=>x.k===presetK).v);renderPresets();billRows();calcClaim();return}
+  const j=e.target.closest('[data-jump]');if(j){e.preventDefault();const el=document.querySelector(j.getAttribute('href'));if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})}
+});
+$('#billbody').addEventListener('input',e=>{const k=e.target.dataset.cv;if(!k)return;cv[k]=k==='cat'?e.target.value:e.target.value;presetK=null;renderPresets();calcClaim()});
+$('#billbody').addEventListener('change',e=>{if(e.target.dataset.cv==='cat'){cv.cat=e.target.value;calcClaim()}});
+$('#c-ded').addEventListener('input',calcClaim);
+$('#copyphone').addEventListener('click',()=>{const t='+852 9341 5321';if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>toast('已複製 '+t),()=>toast('電話：'+t))}else toast('電話：'+t)});
+function waLink(){const gl=st.g==='F'?'女':'男';const msg='你好 beezy，我喺 vhiswiki 睇到自願醫保資料，想了解多啲。\n我今年 '+st.age+' 歲（'+gl+'），\n有冇公司醫保：\n想問嘅問題：';$('#wa').href='https://wa.me/85293415321?text='+encodeURIComponent(msg)}
+
+// restore prefs
+const sa=store.get('age',null);if(sa!=null)st.age=Math.max(0,Math.min(99,+sa||30));
+st.g=store.get('g','F')==='M'?'M':'F';st.s=store.get('s','N')==='Y'?'Y':'N';
+$('#age').value=st.age;$('#agerange').value=st.age;
+$$('#g button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===st.g));$$('#s button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===st.s));
+const _rq=renderQuote;renderQuote=function(){_rq();waLink()};
+renderQuote();renderPresets();billRows();calcClaim();renderCompare();route();
+})();
+</script>

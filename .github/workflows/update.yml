@@ -1,0 +1,59 @@
+# 每日自動：下載政府最新醫保數據 → 重新建立網站 → 發佈
+name: 更新並發佈網站
+
+on:
+  schedule:
+    - cron: "17 1 * * *"   # 每日香港時間 09:17
+  workflow_dispatch:        # 可以喺 Actions 頁面手動撳 "Run workflow"
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 下載數據並建立網站
+        run: python build.py
+
+      - name: 保存新數據（有改動先會記錄）
+        run: |
+          git config user.name "vhiswiki-bot"
+          git config user.email "vhiswiki-bot@users.noreply.github.com"
+          git add data/raw
+          if git diff --cached --quiet; then
+            echo "政府數據冇變"
+          else
+            git commit -m "數據更新 $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
