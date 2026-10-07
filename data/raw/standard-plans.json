@@ -1020,9 +1020,9 @@
         "zh-cn": "保诚保险有限公司"
       },
       "plan-date": {
-        "en": "1 October 2025",
-        "zh-hk": "2025年10月1日",
-        "zh-cn": "2025年10月1日"
+        "en": "1 October 2026",
+        "zh-hk": "2026年10月1日",
+        "zh-cn": "2026年10月1日"
       },
       "earliest-plan-date": {
         "en": "1 April 2019",
@@ -1032,7 +1032,7 @@
       "plan-info-certified": [
         {
           "certification-no": "S00026-01-000-02",
-          "product-id": "S00026-01-000-02-003",
+          "product-id": "S00026-01-000-02-004",
           "plan-level": {
             "en": "Standard Plan",
             "zh-hk": "標準計劃",
@@ -1054,7 +1054,7 @@
             "zh-hk": "/doc/certifiedplan/sp/S00026/S00026-01-000-02-StandardPremium-Bilingual.pdf",
             "zh-cn": "/doc/certifiedplan/sp/S00026/S00026-01-000-02-StandardPremium-Bilingual.pdf"
           },
-          "parent-product-id": "S00026-01-000-02-002"
+          "parent-product-id": "S00026-01-000-02-003"
         }
       ],
       "has-other-info": "",
@@ -2244,9 +2244,9 @@
         "zh-cn": "安达人寿保险香港有限公司"
       },
       "plan-date": {
-        "en": "1 April 2025",
-        "zh-hk": "2025年4月1日",
-        "zh-cn": "2025年4月1日"
+        "en": "1 October 2026",
+        "zh-hk": "2026年10月1日",
+        "zh-cn": "2026年10月1日"
       },
       "earliest-plan-date": {
         "en": "24 March 2021",
@@ -2256,7 +2256,7 @@
       "plan-info-certified": [
         {
           "certification-no": "S00044-01-000-03",
-          "product-id": "S00044-01-000-03-003",
+          "product-id": "S00044-01-000-03-004",
           "plan-level": {
             "en": "Standard Plan",
             "zh-hk": "標準計劃",
@@ -2278,7 +2278,7 @@
             "zh-hk": "/doc/certifiedplan/sp/S00044/S00044-01-000-03-StandardPremium-Bilingual.pdf",
             "zh-cn": "/doc/certifiedplan/sp/S00044/S00044-01-000-03-StandardPremium-Bilingual.pdf"
           },
-          "parent-product-id": "S00044-01-000-03-002"
+          "parent-product-id": "S00044-01-000-03-003"
         }
       ],
       "has-other-info": "",
