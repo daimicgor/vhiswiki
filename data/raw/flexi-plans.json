@@ -13239,9 +13239,9 @@
         "zh-cn": "利宝国际保险有限公司"
       },
       "plan-date": {
-        "en": "1 July 2021",
-        "zh-hk": "2021年7月1日",
-        "zh-cn": "2021年7月1日"
+        "en": "1 November 2026",
+        "zh-hk": "2026年11月1日",
+        "zh-cn": "2026年11月1日"
       },
       "earliest-plan-date": {
         "en": "15 June 2020",
@@ -13251,7 +13251,7 @@
       "plan-info-certified": [
         {
           "certification-no": "F00047-01-000-02",
-          "product-id": "F00047-01-000-02-002",
+          "product-id": "F00047-01-000-02-003",
           "plan-level": {
             "en": "Flexi Plan (Classic)",
             "zh-hk": "靈活計劃（基本）",
@@ -13269,16 +13269,16 @@
             "zh-cn": "标准保费"
           },
           "premium-doc-url": {
-            "en": "/doc/certifiedplan/fp/F00047/F00047-01-000-02-StandardPremium-e.pdf",
-            "zh-hk": "/doc/certifiedplan/fp/F00047/F00047-01-000-02-StandardPremium-c.pdf",
-            "zh-cn": "/doc/certifiedplan/fp/F00047/F00047-01-000-02-StandardPremium-c.pdf"
+            "en": "/doc/certifiedplan/fp/F00047/F00047-01-000-02-StandardPremium-Bilingual.pdf",
+            "zh-hk": "/doc/certifiedplan/fp/F00047/F00047-01-000-02-StandardPremium-Bilingual.pdf",
+            "zh-cn": "/doc/certifiedplan/fp/F00047/F00047-01-000-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00047-01-000-02-001"
+          "parent-product-id": "F00047-01-000-02-002"
         },
         {
           "certification-no": "F00047-01-001-02",
-          "product-id": "F00047-01-001-02-002",
+          "product-id": "F00047-01-001-02-003",
           "plan-level": {
             "en": "Flexi Plan (Classic with SMM)",
             "zh-hk": "靈活計劃（基本+附加醫療保障）",
@@ -13296,12 +13296,12 @@
             "zh-cn": "标准保费"
           },
           "premium-doc-url": {
-            "en": "/doc/certifiedplan/fp/F00047/F00047-01-001-02-StandardPremium-e.pdf",
-            "zh-hk": "/doc/certifiedplan/fp/F00047/F00047-01-001-02-StandardPremium-c.pdf",
-            "zh-cn": "/doc/certifiedplan/fp/F00047/F00047-01-001-02-StandardPremium-c.pdf"
+            "en": "/doc/certifiedplan/fp/F00047/F00047-01-001-02-StandardPremium-Bilingual.pdf",
+            "zh-hk": "/doc/certifiedplan/fp/F00047/F00047-01-001-02-StandardPremium-Bilingual.pdf",
+            "zh-cn": "/doc/certifiedplan/fp/F00047/F00047-01-001-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00047-01-001-02-001"
+          "parent-product-id": "F00047-01-001-02-002"
         }
       ],
       "has-other-info": "",
@@ -13339,9 +13339,9 @@
         "zh-cn": "利宝国际保险有限公司"
       },
       "plan-date": {
-        "en": "1 July 2021",
-        "zh-hk": "2021年7月1日",
-        "zh-cn": "2021年7月1日"
+        "en": "1 November 2026",
+        "zh-hk": "2026年11月1日",
+        "zh-cn": "2026年11月1日"
       },
       "earliest-plan-date": {
         "en": "15 June 2020",
@@ -13351,7 +13351,7 @@
       "plan-info-certified": [
         {
           "certification-no": "F00048-01-000-02",
-          "product-id": "F00048-01-000-02-002",
+          "product-id": "F00048-01-000-02-003",
           "plan-level": {
             "en": "Flexi Plan (Plus)",
             "zh-hk": "靈活計劃（升級）",
@@ -13369,16 +13369,16 @@
             "zh-cn": "标准保费"
           },
           "premium-doc-url": {
-            "en": "/doc/certifiedplan/fp/F00048/F00048-01-000-02-StandardPremium-e.pdf",
-            "zh-hk": "/doc/certifiedplan/fp/F00048/F00048-01-000-02-StandardPremium-c.pdf",
-            "zh-cn": "/doc/certifiedplan/fp/F00048/F00048-01-000-02-StandardPremium-c.pdf"
+            "en": "/doc/certifiedplan/fp/F00048/F00048-01-000-02-StandardPremium-Bilingual.pdf",
+            "zh-hk": "/doc/certifiedplan/fp/F00048/F00048-01-000-02-StandardPremium-Bilingual.pdf",
+            "zh-cn": "/doc/certifiedplan/fp/F00048/F00048-01-000-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00048-01-000-02-001"
+          "parent-product-id": "F00048-01-000-02-002"
         },
         {
           "certification-no": "F00048-01-001-02",
-          "product-id": "F00048-01-001-02-002",
+          "product-id": "F00048-01-001-02-003",
           "plan-level": {
             "en": "Flexi Plan (Plus with SMM)",
             "zh-hk": "靈活計劃（升級+附加醫療保障）",
@@ -13396,12 +13396,12 @@
             "zh-cn": "标准保费"
           },
           "premium-doc-url": {
-            "en": "/doc/certifiedplan/fp/F00048/F00048-01-001-02-StandardPremium-e.pdf",
-            "zh-hk": "/doc/certifiedplan/fp/F00048/F00048-01-001-02-StandardPremium-c.pdf",
-            "zh-cn": "/doc/certifiedplan/fp/F00048/F00048-01-001-02-StandardPremium-c.pdf"
+            "en": "/doc/certifiedplan/fp/F00048/F00048-01-001-02-StandardPremium-Bilingual.pdf",
+            "zh-hk": "/doc/certifiedplan/fp/F00048/F00048-01-001-02-StandardPremium-Bilingual.pdf",
+            "zh-cn": "/doc/certifiedplan/fp/F00048/F00048-01-001-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00048-01-001-02-001"
+          "parent-product-id": "F00048-01-001-02-002"
         }
       ],
       "has-other-info": "",
@@ -13439,9 +13439,9 @@
         "zh-cn": "利宝国际保险有限公司"
       },
       "plan-date": {
-        "en": "1 July 2021",
-        "zh-hk": "2021年7月1日",
-        "zh-cn": "2021年7月1日"
+        "en": "1 November 2026",
+        "zh-hk": "2026年11月1日",
+        "zh-cn": "2026年11月1日"
       },
       "earliest-plan-date": {
         "en": "15 June 2020",
@@ -13451,7 +13451,7 @@
       "plan-info-certified": [
         {
           "certification-no": "F00046-01-000-02",
-          "product-id": "F00046-01-000-02-002",
+          "product-id": "F00046-01-000-02-003",
           "plan-level": {
             "en": "Flexi Plan (Premium)",
             "zh-hk": "靈活計劃（尊尚）",
@@ -13469,12 +13469,12 @@
             "zh-cn": "标准保费"
           },
           "premium-doc-url": {
-            "en": "/doc/certifiedplan/fp/F00046/F00046-01-000-02-StandardPremium-e.pdf",
-            "zh-hk": "/doc/certifiedplan/fp/F00046/F00046-01-000-02-StandardPremium-c.pdf",
-            "zh-cn": "/doc/certifiedplan/fp/F00046/F00046-01-000-02-StandardPremium-c.pdf"
+            "en": "/doc/certifiedplan/fp/F00046/F00046-01-000-02-StandardPremium-Bilingual.pdf",
+            "zh-hk": "/doc/certifiedplan/fp/F00046/F00046-01-000-02-StandardPremium-Bilingual.pdf",
+            "zh-cn": "/doc/certifiedplan/fp/F00046/F00046-01-000-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00046-01-000-02-001"
+          "parent-product-id": "F00046-01-000-02-002"
         }
       ],
       "has-other-info": "",
