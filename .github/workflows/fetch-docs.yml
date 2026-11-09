@@ -1,0 +1,34 @@
+# 下載所有計劃文件並轉成文字，存到 docs-text 分支（唔影響網站）
+name: 下載計劃文件
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [tools/fetch_docs.py, .github/workflows/fetch-docs.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: 取返之前下載過嘅文字檔
+        run: |
+          git fetch origin docs-text:docs-text 2>/dev/null && git checkout docs-text -- docs-text 2>/dev/null || echo "第一次下載"
+      - run: sudo apt-get install -y poppler-utils
+      - run: python tools/fetch_docs.py
+      - name: 存到 docs-text 分支
+        run: |
+          git config user.name "vhiswiki-bot"
+          git config user.email "vhiswiki-bot@users.noreply.github.com"
+          mv docs-text /tmp/docs-text
+          git checkout --orphan docs-text-new
+          git rm -rq --cached . && git clean -fdq -e .git
+          mv /tmp/docs-text ./docs-text
+          git add docs-text
+          git commit -qm "計劃文件文字 $(date -u +%Y-%m-%d)"
+          git push -f origin docs-text-new:docs-text
