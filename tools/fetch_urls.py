@@ -13,7 +13,7 @@ for line in (ROOT / "tools/fetch_urls.txt").read_text("utf-8").splitlines():
     url = url.strip()
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"})
-        body = urllib.request.urlopen(req, timeout=90).read()
+        import time as _t; _s=_t.time(); body = urllib.request.urlopen(req, timeout=90).read(); print("secs", round(_t.time()-_s,1))
         is_pdf = body[:4] == b"%PDF"
         f = OUT / (name + (".pdf" if is_pdf else ".html"))
         f.write_bytes(body)
