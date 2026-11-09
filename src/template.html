@@ -304,7 +304,7 @@ footer strong{color:var(--ink)}
         <div class="cstep-h"><span class="sn">1</span><h3>自願醫保計劃</h3></div>
         <div class="cgrid">
           <div class="field" style="grid-column:1/-1"><label for="e-q">搜尋計劃或保險公司</label><input class="inp" id="e-q" type="search" placeholder="例如：富衛、智選、標準"></div>
-          <div class="field" style="grid-column:1/-1"><label for="e-fam">計劃</label><select id="e-fam"></select></div>
+          <div class="field" style="grid-column:1/-1"><label for="e-fam">計劃（冇自願醫保可揀第一項）</label><select id="e-fam"></select></div>
           <div class="field" style="grid-column:1/-1"><label for="e-ver">版本（病房級別 / 自付費）</label><select id="e-ver"></select></div>
         </div>
         <div class="planfacts" id="e-facts"></div>
@@ -637,15 +637,18 @@ const pLabel=k=>{const[c,t]=k.split('|');return PROC[c][0]+(t?'（'+(TYPE_ZH[t]|
 // plan families
 const FAMS={};PLANS.forEach(p=>{if(p.b==='R')return;const k=p.co+'|'+p.n;(FAMS[k]=FAMS[k]||[]).push(p)});
 const FKEYS=Object.keys(FAMS).sort((a,b)=>a.localeCompare(b,'zh-HK'));
+const NONE_K='__none__';
+FAMS[NONE_K]=[['__none_w','普通房'],['__none_s','半私家房'],['__none_p','私家房']].map(([id,r])=>{const o={id,co:'',n:'冇自願醫保',lv:'入住'+r,t:'N',cur:'HKD',ded:0,room:r,b:'S'};byId[id]=o;return o});
+FKEYS.unshift(NONE_K);
 const es={fam:null,ver:null,proc:'SU002|Laparoscopic',hosp:'*',pct:0,cat:'major',bill:null};
-function schedFor(p){const b=BEN[p.id]||null;if(!b)return Object.assign({},STD,{src:p.t==='S'?'std':'fallback'});return Object.assign({src:'doc'},b)}
+function schedFor(p){if(p.t==='N')return{none:true,room:[0,0],misc:0,surg:0,anaes:0,ot:0,annual:null,cls:p.room,src:'none'};const b=BEN[p.id]||null;if(!b)return Object.assign({},STD,{src:p.t==='S'?'std':'fallback'});return Object.assign({src:'doc'},b)}
 const fx=p=>p.cur==='USD'?FX:1;
 
 function fillFam(){
   const q=($('#e-q').value||'').trim().toLowerCase();
-  const ks=FKEYS.filter(k=>!q||k.toLowerCase().includes(q));
+  const ks=FKEYS.filter(k=>k===NONE_K||!q||k.toLowerCase().includes(q));
   if(es.fam&&!ks.includes(es.fam)&&ks.length)es.fam=ks[0];
-  $('#e-fam').innerHTML=ks.map(k=>{const[c,n]=k.split('|');const has=FAMS[k].some(p=>BEN[p.id]);return'<option value="'+esc(k)+'"'+(k===es.fam?' selected':'')+'>'+esc(c+' · '+n)+(has||FAMS[k][0].t==='S'?'':'（未有詳細上限）')+'</option>'}).join('')||'<option value="">冇符合嘅計劃</option>';
+  $('#e-fam').innerHTML=ks.map(k=>{if(k===NONE_K)return'<option value="'+k+'"'+(k===es.fam?' selected':'')+'>冇自願醫保（只有公司醫保／自費）</option>';const[c,n]=k.split('|');const has=FAMS[k].some(p=>BEN[p.id]);return'<option value="'+esc(k)+'"'+(k===es.fam?' selected':'')+'>'+esc(c+' · '+n)+(has||FAMS[k][0].t==='S'?'':'（未有詳細上限）')+'</option>'}).join('')||'<option value="">冇符合嘅計劃</option>';
   if(!es.fam||!ks.includes(es.fam))es.fam=ks[0]||null;
   fillVer();
 }
@@ -659,6 +662,7 @@ function lim(x,cur){if(x==='F')return'全數';if(x==null)return'—';return(cur=
 function renderFacts(){
   const p=byId[es.ver];if(!p){$('#e-facts').innerHTML='';return}
   const s=schedFor(p),c=p.cur;const t=[];
+  if(s.none){$('#e-facts').innerHTML='<span class="tag warn">冇自願醫保</span><span class="tag">'+esc(p.room)+'</span><span class="tag">團體醫療以外全部自付</span>';return}
   t.push('<span class="tag acc">'+(p.t==='S'?'標準計劃':'靈活計劃')+'</span>');
   if(p.ded)t.push('<span class="tag acc">'+dedLabel(p)+'</span>');
   if(s.cls)t.push('<span class="tag">'+s.cls+'</span>');
@@ -750,7 +754,8 @@ function calc(){
   if(p.cur==='USD')notes.push('美元計劃上限以 US$1 = HK$7.8 換算。');
   if(s.note)notes.push(s.note);
   if(ded&&gon&&$('#g-offset').checked&&dedEff<ded)notes.push('團體醫療已賠 $'+fmt(gTot)+'，抵銷咗部分或全部自付費。');
-  if(!s.smm)keys.forEach(x=>{if(L[x]!==Infinity&&it[x]-G[x]>L[x]+1)notes.push({room:'房租',surg:'外科醫生費',anaes:'麻醉科醫生費',ot:'手術室費用',misc:'雜項費用'}[x]+'超出自願醫保上限 $'+fmt(L[x])+'。')});
+  if(s.none)notes.push('冇自願醫保：團體醫療賠完之後，餘額全部要自己支付。');
+  if(!s.smm&&!s.none)keys.forEach(x=>{if(L[x]!==Infinity&&it[x]-G[x]>L[x]+1)notes.push({room:'房租',surg:'外科醫生費',anaes:'麻醉科醫生費',ot:'手術室費用',misc:'雜項費用'}[x]+'超出自願醫保上限 $'+fmt(L[x])+'。')});
   return{it,G,V,L,bill,gTot,vFinal,dedUsed,ded,self:Math.max(0,bill-gTot-vFinal),notes,s};
 }
 const ROWN={room:'病房及膳食',surg:'外科醫生費',anaes:'麻醉科醫生費',ot:'手術室費用',misc:'雜項費用（藥物、化驗、物料）'};
@@ -779,11 +784,11 @@ function update(){
   $('#r-bar').innerHTML='<span style="width:'+w(r.gTot)+';background:var(--s3)"></span><span style="width:'+w(r.vFinal)+';background:var(--accent)"></span><span style="width:'+w(r.self)+';background:var(--warn)"></span>';
   $('#r-notes').innerHTML=r.notes.map(n=>'<li>'+esc(n)+'</li>').join('');
   const p=byId[es.ver];
-  const msg='你好 beezy，我用咗 vhiswiki 手術賠償估算：\n計劃：'+(p?p.co+' '+p.n+'（'+p.lv+'）':'')+'\n手術：'+pLabel(es.proc)+'\n估計自己要補：HK$'+fmt(r.self)+'\n想了解點樣減少保障缺口。';
+  const msg='你好 beezy，我用咗 vhiswiki 手術賠償估算：\n計劃：'+(p?(p.t==='N'?'冇自願醫保（'+p.lv+'）':p.co+' '+p.n+'（'+p.lv+'）'):'')+'\n手術：'+pLabel(es.proc)+'\n估計自己要補：HK$'+fmt(r.self)+'\n想了解點樣減少保障缺口。';
   $('#r-wa').href='https://wa.me/85293415321?text='+encodeURIComponent(msg);
 }
 $('#e-q').addEventListener('input',fillFam);
-$('#e-fam').addEventListener('change',e=>{es.fam=e.target.value;es.ver=null;fillVer()});
+$('#e-fam').addEventListener('change',e=>{es.fam=e.target.value;es.ver=null;if(es.fam===NONE_K&&!$('#g-on').checked){$('#g-on').checked=true;$('#g-box').hidden=false}fillVer()});
 $('#e-ver').addEventListener('change',e=>{es.ver=e.target.value;renderFacts();estimateBill(true)});
 $('#e-proc').addEventListener('change',e=>{es.proc=e.target.value;es.hosp='*';fillHosp()});
 $('#e-hosp').addEventListener('change',e=>{es.hosp=e.target.value;estimateBill(true)});
