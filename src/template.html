@@ -170,7 +170,7 @@ table.bill .lim{font-size:11.5px;color:var(--muted)}
 .cgrid .field,.cstep{min-width:0}
 .cgrid select,.cgrid input{max-width:100%;min-width:0}
 #e-pct{flex-wrap:wrap}
-.cgrid.g3{grid-template-columns:repeat(4,minmax(0,1fr))}
+.cgrid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:760px){.cgrid.g3{grid-template-columns:1fr 1fr}}
 @media (max-width:480px){.cgrid{grid-template-columns:1fr}}
 .planfacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
@@ -225,7 +225,7 @@ footer strong{color:var(--ink)}
   <nav class="tabs" aria-label="主要導覽">
     <a href="#quote" data-tab="quote">保費比較</a>
     <a href="#compare" data-tab="compare">並排比較<span class="cnt" id="cmpcnt" hidden>0</span></a>
-    <a href="#claim" data-tab="claim">手術賠償估算</a>
+    <a href="#claim" data-tab="claim">賠償估算</a>
     <a href="#guide" data-tab="guide">醫保知識</a>
     <a href="#about" data-tab="about">關於本站</a>
   </nav>
@@ -296,7 +296,7 @@ footer strong{color:var(--ink)}
 
 <!-- CLAIM -->
 <section class="page" id="claim" data-page hidden><div class="wrap">
-  <h2>手術賠償估算</h2>
+  <h2>手術及治療賠償估算</h2>
   <p class="sub">揀計劃同手術，估算醫院大約收幾多、團體醫療同自願醫保各賠幾多、自己要補幾多。手術費用來自私家醫院公布嘅 2025 年歷史賬單統計，各計劃上限來自官方計劃文件。</p>
   <div class="claim">
     <div class="cstack">
@@ -313,7 +313,7 @@ footer strong{color:var(--ink)}
       <div class="panel cstep">
         <div class="cstep-h"><span class="sn">2</span><h3>手術及醫院</h3></div>
         <div class="cgrid">
-          <div class="field" style="grid-column:1/-1"><label for="e-proc">手術 / 程序</label><select id="e-proc"></select></div>
+          <div class="field" style="grid-column:1/-1"><label for="e-proc">手術 / 治療（包括癌症、心臟等高額治療）</label><select id="e-proc"></select></div>
           <div class="field"><label for="e-hosp">醫院</label><select id="e-hosp"></select></div>
           <div class="field"><span class="lbl">收費水平</span>
             <div class="seg" id="e-pct"><button type="button" data-v="0" aria-pressed="true">中位數</button><button type="button" data-v="1" aria-pressed="false">較貴（第 90 百分值）</button></div></div>
@@ -335,6 +335,7 @@ footer strong{color:var(--ink)}
             <div class="field"><label for="g-anaes">麻醉科醫生費</label><input class="inp num" id="g-anaes" type="number" min="0" step="500" value="6000"></div>
             <div class="field"><label for="g-ot">手術室費用</label><input class="inp num" id="g-ot" type="number" min="0" step="500" value="6000"></div>
             <div class="field"><label for="g-misc">雜項費用</label><input class="inp num" id="g-misc" type="number" min="0" step="1000" value="10000"></div>
+            <div class="field"><label for="g-cancer">癌症治療（化療／標靶等）</label><input class="inp num" id="g-cancer" type="number" min="0" step="10000" value="0"></div>
             <div class="field"><label for="g-smm">額外醫療（SMM）上限</label><input class="inp num" id="g-smm" type="number" min="0" step="10000" value="0"></div>
             <div class="field"><label for="g-smmp">SMM 賠償比率 %</label><input class="inp num" id="g-smmp" type="number" min="0" max="100" step="5" value="80"></div>
           </div>
@@ -476,6 +477,7 @@ footer strong{color:var(--ink)}
         <li>排序只按所選條件下嘅年繳標準保費，所有公司用同一套規則，排名不受任何保險公司影響。</li>
         <li>保費為標準保費，未包括保監局徵費，亦未計核保加費或任何推廣優惠。</li>
         <li>按下次生日計年齡嘅計劃，本站已換算為實際年齡；美元計劃以 US$1 = HK$7.8 換算作排序參考。</li>
+        <li>賠償估算：常見手術費用來自私家醫院價格透明度計劃 2025 年歷史賬單統計；癌症及心臟等高額治療用醫院公布嘅定價收費或註明來源嘅參考價；各計劃上限來自官方計劃文件。</li>
       </ul>
       <p id="about-date"></p>
     </article>
@@ -617,7 +619,7 @@ function drawChart(){
 }
 
 // ===== 手術賠償估算 =====
-const STD={room:[750,180],misc:14000,surg:{complex:50000,major:25000,inter:12500,minor:5000},anaes:{p:35},ot:{p:35},annual:420000,cls:'普通房',src:'std'};
+const STD={room:[750,180],icu:[3500,25],cancer:80000,misc:14000,surg:{complex:50000,major:25000,inter:12500,minor:5000},anaes:{p:35},ot:{p:35},annual:420000,cls:'普通房',src:'std'};
 const BEN=DB.ben||{}, SURGD=DB.surg||[];
 const CAT_N={complex:'複雜',major:'大型',inter:'中型',minor:'小型'};
 const HOSP_ZH={"Canossa Hospital (Caritas)":"嘉諾撒醫院","Gleneagles Hospital Hong Kong":"港怡醫院","Hong Kong Adventist Hospital - Stubbs Road":"港安醫院－司徒拔道","Hong Kong Sanatorium & Hospital Limited":"養和醫院","Matilda & War Memorial Hospital":"明德國際醫院","St. Paul's Hospital":"聖保祿醫院","Evangel Hospital":"播道醫院","Hong Kong Baptist Hospital":"浸信會醫院","Precious Blood Hospital (Caritas)":"寶血醫院（明愛）","St. Teresa's Hospital":"聖德肋撒醫院","CUHK Medical Centre":"中大醫院","Hong Kong Adventist Hospital - Tsuen Wan":"港安醫院－荃灣","Union Hospital":"仁安醫院"};
@@ -641,15 +643,16 @@ const NONE_K='__none__';
 FAMS[NONE_K]=[['__none_w','普通房'],['__none_s','半私家房'],['__none_p','私家房']].map(([id,r])=>{const o={id,co:'',n:'冇自願醫保',lv:'入住'+r,t:'N',cur:'HKD',ded:0,room:r,b:'S'};byId[id]=o;return o});
 FKEYS.unshift(NONE_K);
 const es={fam:null,ver:null,proc:'SU002|Laparoscopic',hosp:'*',pct:0,cat:'major',bill:null};
-function schedFor(p){if(p.t==='N')return{none:true,room:[0,0],misc:0,surg:0,anaes:0,ot:0,annual:null,cls:p.room,src:'none'};const b=BEN[p.id]||null;if(!b)return Object.assign({},STD,{src:p.t==='S'?'std':'fallback'});return Object.assign({src:'doc'},b)}
+function schedFor(p){if(p.t==='N')return{none:true,room:[0,0],icu:[0,0],cancer:0,misc:0,surg:0,anaes:0,ot:0,annual:null,cls:p.room,src:'none'};const b=BEN[p.id]||null;if(!b)return Object.assign({},STD,{src:p.t==='S'?'std':'fallback'});return Object.assign({src:'doc'},b)}
 const fx=p=>p.cur==='USD'?FX:1;
 
 function fillFam(){
   const q=($('#e-q').value||'').trim().toLowerCase();
   const ks=FKEYS.filter(k=>k===NONE_K||!q||k.toLowerCase().includes(q));
-  if(es.fam&&!ks.includes(es.fam)&&ks.length)es.fam=ks[0];
+  const firstReal=ks.find(k=>k!==NONE_K)||ks[0];
+  if((!es.fam||!ks.includes(es.fam)||(q&&es.fam===NONE_K&&firstReal))&&ks.length)es.fam=firstReal;
   $('#e-fam').innerHTML=ks.map(k=>{if(k===NONE_K)return'<option value="'+k+'"'+(k===es.fam?' selected':'')+'>冇自願醫保（只有公司醫保／自費）</option>';const[c,n]=k.split('|');const has=FAMS[k].some(p=>BEN[p.id]);return'<option value="'+esc(k)+'"'+(k===es.fam?' selected':'')+'>'+esc(c+' · '+n)+(has||FAMS[k][0].t==='S'?'':'（未有詳細上限）')+'</option>'}).join('')||'<option value="">冇符合嘅計劃</option>';
-  if(!es.fam||!ks.includes(es.fam))es.fam=ks[0]||null;
+  if(!es.fam||!ks.includes(es.fam))es.fam=firstReal||null;
   fillVer();
 }
 function fillVer(){
@@ -669,76 +672,127 @@ function renderFacts(){
   t.push('<span class="tag">房租 '+(s.room==='F'?'全數':lim(s.room[0],c)+'/日')+'</span>');
   t.push('<span class="tag">外科 '+(s.surg==='F'?'全數':typeof s.surg==='object'?'複雜 '+lim(s.surg.complex,c):lim(s.surg,c))+'</span>');
   t.push('<span class="tag">雜費 '+lim(s.misc,c)+'</span>');
+  if(s.cancer!=null)t.push('<span class="tag">癌症治療 '+lim(s.cancer,c)+'</span>');
   t.push('<span class="tag">每年上限 '+(s.annual?lim(s.annual,c):'無')+'</span>');
   if(s.smm)t.push('<span class="tag">額外醫療 '+lim(s.smm.lim,c)+(s.smm.c?' · 賠 '+(100-s.smm.c)+'%':' · 全數')+'</span>');
   if(s.coins)t.push('<span class="tag warn">共同保險 '+s.coins.p+'%</span>');
   if(s.src==='fallback')t.push('<span class="tag warn">未有呢個計劃嘅詳細上限，暫用標準計劃上限估算（實際只會更高）</span>');
   $('#e-facts').innerHTML=t.join('');
 }
+const MAJ=(DB.major&&DB.major.items)||[],MSRC=(DB.major&&DB.major.sources)||{};
+const MAJById={};MAJ.forEach(m=>MAJById[m.id]=m);
+const isM=k=>k&&k.startsWith('M|');
+const procName=k=>isM(k)?MAJById[k.slice(2)].n:pLabel(k);
 function fillProc(){
-  $('#e-proc').innerHTML=PKEYS.map(k=>'<option value="'+k+'"'+(k===es.proc?' selected':'')+'>'+pLabel(k)+'</option>').join('');
+  const groups=[['常見手術（13 間私家醫院統計）',PKEYS.map(k=>[k,pLabel(k)])]];
+  const gs={};MAJ.forEach(m=>{(gs[m.g]=gs[m.g]||[]).push(['M|'+m.id,m.n])});
+  ['癌症手術','心臟','其他大型手術','癌症藥物及電療','一年治療組合'].forEach(g=>{if(gs[g])groups.push(['高額治療：'+g,gs[g]])});
+  $('#e-proc').innerHTML=groups.map(([g,opts])=>'<optgroup label="'+esc(g)+'">'+opts.map(([k,n])=>'<option value="'+k+'"'+(k===es.proc?' selected':'')+'>'+esc(n)+'</option>').join('')+'</optgroup>').join('');
   fillHosp();
 }
-function procRows(){const[c,t]=es.proc.split('|');return SURGD.filter(r=>r.code===c&&r.type===t)}
+function procRows(){if(isM(es.proc))return[];const[c,t]=es.proc.split('|');return SURGD.filter(r=>r.code===c&&r.type===t)}
+function majParts(m){return m.parts?m.parts.map(id=>MAJById[id]):[m]}
 function fillHosp(){
-  const rows=procRows();
-  if(es.hosp!=='*'&&!rows.some(r=>r.hospital===es.hosp))es.hosp='*';
-  $('#e-hosp').innerHTML='<option value="*">所有醫院（中間值）</option>'+rows.slice().sort((a,b)=>(a.tot?a.tot[0]:0)-(b.tot?b.tot[0]:0)).map(r=>'<option value="'+esc(r.hospital)+'"'+(r.hospital===es.hosp?' selected':'')+'>'+esc(HOSP_ZH[r.hospital]||r.hospital)+(r.tot?' · 約 $'+fmt(r.tot[0]):'')+'</option>').join('');
-  const c=es.proc.split('|')[0];
-  es.cat=PROC[c][1];$('#e-cat').value=es.cat;
-  const n=PROC[c][2]==='x'?'自願醫保一般不保障懷孕及分娩，呢項只作參考。':PROC[c][2]==='m'?'只有醫療需要先獲保障，美容或宗教原因不保。':'';
-  $('#e-procnote').textContent=n+'手術類別由保險公司按其手術表釐定，呢度係一般分類，可以自行更改。';
+  const pctBtns=$$('#e-pct button');
+  if(isM(es.proc)){
+    const m=MAJById[es.proc.slice(2)],parts=majParts(m);
+    const srcs=[...new Set(parts.map(x=>x.src))];
+    $('#e-hosp').innerHTML='<option value="*">'+(srcs.length>1?'組合參考價':esc(MSRC[srcs[0]].name.split('（')[0].split('：')[0].split('《')[0]))+'</option>';
+    $('#e-hosp').disabled=true;
+    pctBtns[0].textContent='一般';pctBtns[1].textContent='較貴／有併發症';
+    const surg=parts.find(x=>x.cat);es.cat=surg?surg.cat:'major';$('#e-cat').value=es.cat;$('#e-cat').disabled=!surg;
+    $('#e-procnote').innerHTML='費用來源：'+srcs.map(s=>'<a href="'+MSRC[s].url+'" target="_blank" rel="noopener">'+esc(MSRC[s].name)+'</a>').join('；')+'。只係一般參考價，實際收費視乎醫院、醫生同病情。'+(parts.some(x=>x.drug)?' 癌症藥物同電療歸入自願醫保「訂明非手術癌症治療」項目計算。':'');
+  }else{
+    $('#e-hosp').disabled=false;$('#e-cat').disabled=false;
+    pctBtns[0].textContent='中位數';pctBtns[1].textContent='較貴（第 90 百分值）';
+    const rows=procRows();
+    if(es.hosp!=='*'&&!rows.some(r=>r.hospital===es.hosp))es.hosp='*';
+    $('#e-hosp').innerHTML='<option value="*">所有醫院（中間值）</option>'+rows.slice().sort((a,b)=>(a.tot?a.tot[0]:0)-(b.tot?b.tot[0]:0)).map(r=>'<option value="'+esc(r.hospital)+'"'+(r.hospital===es.hosp?' selected':'')+'>'+esc(HOSP_ZH[r.hospital]||r.hospital)+(r.tot?' · 約 $'+fmt(r.tot[0]):'')+'</option>').join('');
+    const c=es.proc.split('|')[0];
+    es.cat=PROC[c][1];$('#e-cat').value=es.cat;
+    const n=PROC[c][2]==='x'?'自願醫保一般不保障懷孕及分娩，呢項只作參考。':PROC[c][2]==='m'?'只有醫療需要先獲保障，美容或宗教原因不保。':'';
+    $('#e-procnote').textContent=n+'手術類別由保險公司按其手術表釐定，呢度係一般分類，可以自行更改。';
+  }
   estimateBill(true);
+}
+const ICU_RATE=12000;
+function splitPkg(T,los,icu,rate){
+  // split an all-in package price into bill items
+  const surg=Math.round(T*0.28),anaes=Math.round(T*0.09),ot=Math.round(T*0.12);
+  let room=Math.min(los*rate,T*0.15),icuAmt=Math.min(icu*ICU_RATE,T*0.12);
+  const misc=Math.max(0,T-surg-anaes-ot-room-icuAmt);
+  return{surg,anaes,ot,room,icuAmt,misc};
 }
 function estimateBill(reset){
   if(!reset&&es.bill)return;
-  const rows=procRows(),p=byId[es.ver];if(!rows.length)return;
+  const p=byId[es.ver];
+  const sc=p?schedFor(p):STD;const rate=ROOMRATE[sc.cls||(p&&p.room)||'普通房']||1100;
+  if(isM(es.proc)){
+    const m=MAJById[es.proc.slice(2)];
+    const b={days:0,rate,surg:0,anaes:0,ot:0,misc:0,icud:0,icur:ICU_RATE,cancer:0,los:0,doc:0,hosp:0,major:true};
+    majParts(m).forEach(x=>{
+      if(x.drug){b.cancer+=x.drug[es.pct];return}
+      const T=x.t[es.pct];const s=splitPkg(T,x.los,x.icu,rate);
+      b.days+=x.los;b.los+=x.los;b.icud+=x.icu;b.surg+=s.surg;b.anaes+=s.anaes;b.ot+=s.ot;b.misc+=s.misc;
+      b._room=(b._room||0)+s.room;b._icu=(b._icu||0)+s.icuAmt;
+    });
+    b.rate=b.days?Math.round((b._room||0)/b.days):rate;
+    b.icur=b.icud?Math.round((b._icu||0)/b.icud):ICU_RATE;
+    ['surg','anaes','ot','misc','cancer'].forEach(x=>b[x]=Math.round(b[x]));
+    es.bill=b;renderBill();return;
+  }
+  const rows=procRows();if(!rows.length)return;
   const sel=es.hosp==='*'?rows:rows.filter(r=>r.hospital===es.hosp);
   const pick=k=>median(sel.map(r=>r[k]?r[k][es.pct]:null))||0;
   const doc=pick('doc'),hosp=pick('hosp'),los=median(sel.map(r=>r.los))||0;
   const days=Math.round(los);
-  const sc=p?schedFor(p):STD;const rate=ROOMRATE[sc.cls||(p&&p.room)||'普通房']||1100;
   const room=Math.min(days*rate,hosp*0.45);
   const rest=hosp-room;
   const surg=Math.round(doc/1.35);
-  es.bill={days,rate:days?Math.round(room/days):0,surg,anaes:Math.round(doc-surg),ot:Math.round(rest*0.4),misc:Math.round(rest*0.6),los,doc,hosp};
+  es.bill={days,rate:days?Math.round(room/days):0,surg,anaes:Math.round(doc-surg),ot:Math.round(rest*0.4),misc:Math.round(rest*0.6),icud:0,icur:ICU_RATE,cancer:0,los,doc,hosp};
   renderBill();
 }
 function gv(id){return Math.max(0,+$('#'+id).value||0)}
+const HOSP_KEYS=['room','icu','surg','anaes','ot','misc'];
 function calc(){
   const p=byId[es.ver];const b=es.bill;if(!p||!b)return null;
   const s=schedFor(p),k=fx(p);
-  const it={room:b.days*b.rate,surg:b.surg,anaes:b.anaes,ot:b.ot,misc:b.misc};
+  const it={room:b.days*b.rate,icu:b.icud*b.icur,surg:b.surg,anaes:b.anaes,ot:b.ot,misc:b.misc,cancer:b.cancer};
   const keys=Object.keys(it);
-  // 1. group
-  const G={room:0,surg:0,anaes:0,ot:0,misc:0};let smm=0;
+  // 1. group medical
+  const G={};keys.forEach(x=>G[x]=0);let smm=0;
   const gon=$('#g-on').checked;
   if(gon){
     G.room=Math.min(b.rate,gv('g-room'))*Math.min(b.days,gv('g-days'));
+    G.icu=Math.min(b.icur,gv('g-room'))*Math.min(b.icud,gv('g-days'));
     G.surg=Math.min(it.surg,gv('g-surg'));G.anaes=Math.min(it.anaes,gv('g-anaes'));G.ot=Math.min(it.ot,gv('g-ot'));G.misc=Math.min(it.misc,gv('g-misc'));
-    const rem=keys.reduce((a,x)=>a+it[x]-G[x],0);
+    G.cancer=Math.min(it.cancer,gv('g-cancer'));
+    const rem=HOSP_KEYS.reduce((a,x)=>a+it[x]-G[x],0);
     smm=Math.min(gv('g-smm'),rem*gv('g-smmp')/100);
-    if(rem>0)keys.forEach(x=>G[x]+=smm*(it[x]-G[x])/rem);
+    if(rem>0)HOSP_KEYS.forEach(x=>G[x]+=smm*(it[x]-G[x])/rem);
   }
   const gTot=keys.reduce((a,x)=>a+G[x],0);
   // 2. VHIS item limits
   const L={};
   L.room=s.room==='F'?Infinity:Math.min(b.rate,s.room[0]*k)*Math.min(b.days,s.room[1]||999);
+  const icuS=s.icu||[3500,25];
+  L.icu=icuS==='F'?Infinity:Math.min(b.icur,icuS[0]*k)*Math.min(b.icud,icuS[1]||25);
   const sl=s.surg==='F'?Infinity:typeof s.surg==='object'?(s.surg[es.cat]||0)*k:s.surg*k;
   L.surg=sl;
   const surgBen=Math.min(it.surg,sl);
   const pctLim=(x)=>x==='F'?Infinity:x&&x.p!=null?(sl===Infinity?Infinity:surgBen*x.p/100):x&&typeof x==='object'?(x[es.cat]||0)*k:(x||0)*k;
   L.anaes=pctLim(s.anaes);L.ot=pctLim(s.ot);
   L.misc=s.misc==='F'?Infinity:s.misc*k;
+  const can=s.cancer!=null?s.cancer:80000;
+  L.cancer=can==='F'?Infinity:can*k;
   const V={};keys.forEach(x=>V[x]=Math.max(0,Math.min(L[x],it[x]-G[x])));
   const notes=[];
-  // supplementary major medical: pays part of the excess over item limits
   let smmPay=0;
   if(s.smm){
-    const ex={};let exT=0;keys.forEach(x=>{ex[x]=Math.max(0,it[x]-G[x]-V[x]);exT+=ex[x]});
+    const ex={};let exT=0;HOSP_KEYS.forEach(x=>{ex[x]=Math.max(0,it[x]-G[x]-V[x]);exT+=ex[x]});
     smmPay=Math.min(s.smm.lim*k,exT*(100-s.smm.c)/100);
-    if(exT>0)keys.forEach(x=>V[x]+=smmPay*ex[x]/exT);
-    if(smmPay>0)notes.push('額外醫療保障（SMM）賠咗超出項目上限嘅部分 $'+fmt(smmPay)+(s.smm.c?'（賠 '+(100-s.smm.c)+'%）':'')+'。');
+    if(exT>0)HOSP_KEYS.forEach(x=>V[x]+=smmPay*ex[x]/exT);
+    if(smmPay>0)notes.push('額外醫療保障（SMM）賠咗超出項目上限嘅部分 $'+fmt(smmPay)+(s.smm.c?'（賠 '+(100-s.smm.c)+'%）':'')+(smmPay>=s.smm.lim*k-1?'，已用盡上限':'')+'。');
   }
   let vTot=keys.reduce((a,x)=>a+V[x],0);
   const ded=(dedHKD(p)||0);
@@ -746,7 +800,7 @@ function calc(){
   const dedUsed=Math.min(dedEff,vTot);
   let vFinal=vTot-dedUsed;
   if(s.coins){const cp=Math.min(vFinal*s.coins.p/100,s.coins.cap!=null?s.coins.cap*k:Infinity);vFinal-=cp;notes.push('計劃設 '+s.coins.p+'% 保障分擔額'+(s.coins.cap!=null?'（上限 $'+fmt(s.coins.cap*k)+'）':'')+'，已扣 $'+fmt(cp)+'。')}
-  if(s.annual&&vFinal>s.annual*k){vFinal=s.annual*k;notes.push('已達每年保障上限。')}
+  if(s.annual&&vFinal>s.annual*k){vFinal=s.annual*k;notes.push('已達每年保障上限 $'+fmt(s.annual*k)+'。')}
   const sc=keys.reduce((a,x)=>a+V[x],0);const ratio=sc?vFinal/sc:0;
   keys.forEach(x=>V[x]*=ratio);
   const bill=keys.reduce((a,x)=>a+it[x],0);
@@ -755,24 +809,26 @@ function calc(){
   if(s.note)notes.push(s.note);
   if(ded&&gon&&$('#g-offset').checked&&dedEff<ded)notes.push('團體醫療已賠 $'+fmt(gTot)+'，抵銷咗部分或全部自付費。');
   if(s.none)notes.push('冇自願醫保：團體醫療賠完之後，餘額全部要自己支付。');
-  if(!s.smm&&!s.none)keys.forEach(x=>{if(L[x]!==Infinity&&it[x]-G[x]>L[x]+1)notes.push({room:'房租',surg:'外科醫生費',anaes:'麻醉科醫生費',ot:'手術室費用',misc:'雜項費用'}[x]+'超出自願醫保上限 $'+fmt(L[x])+'。')});
+  if(!s.none)keys.forEach(x=>{if(s.smm&&HOSP_KEYS.includes(x))return;if(it[x]>0&&L[x]!==Infinity&&it[x]-G[x]>L[x]+1)notes.push(ROWN[x].split('（')[0]+'超出自願醫保上限 $'+fmt(L[x])+'。')});
   return{it,G,V,L,bill,gTot,vFinal,dedUsed,ded,self:Math.max(0,bill-gTot-vFinal),notes,s};
 }
-const ROWN={room:'病房及膳食',surg:'外科醫生費',anaes:'麻醉科醫生費',ot:'手術室費用',misc:'雜項費用（藥物、化驗、物料）'};
+const ROWN={room:'病房及膳食',icu:'深切治療',surg:'外科醫生費',anaes:'麻醉科醫生費',ot:'手術室費用',misc:'雜項費用（藥物、化驗、植入物等）',cancer:'癌症藥物／放射治療（非手術癌症治療）'};
 function renderBill(){
   const b=es.bill;if(!b)return;
-  const inp=(k,v,step)=>'<input type="number" min="0" step="'+(step||500)+'" data-eb="'+k+'" id="eb-'+k+'" value="'+Math.round(v)+'" aria-label="'+k+'">';
+  const inp=(k,v,step,st)=>'<input type="number" min="0" step="'+(step||500)+'" data-eb="'+k+'" id="eb-'+k+'" value="'+Math.round(v)+'" aria-label="'+k+'"'+(st?' style="'+st+'"':'')+'>';
+  const small='width:84px;min-width:0';
+  const row=(k,cell1)=>'<tr><td>'+ROWN[k]+'<div class="lim" id="el-'+k+'"></div>'+(k==='room'?'<div class="lim">每日 '+inp('rate',b.rate,100,small)+'</div>':k==='icu'?'<div class="lim">日數 '+inp('icud',b.icud,1,small)+' 每日 '+inp('icur',b.icur,500,small)+'</div>':'')+'</td><td class="r'+(cell1?' num" id="ec-'+k+'">':'">'+inp(k,b[k]))+'</td><td class="r num" id="eg-'+k+'"></td><td class="r num" id="ev-'+k+'"></td><td class="r num" id="es-'+k+'"></td></tr>';
+  const showIcu=b.icud>0||b.major, showCan=b.cancer>0||b.major;
   $('#e-bill').innerHTML=
-   '<tr><td>住院日數<div class="lim">統計平均 '+(Math.round(b.los*10)/10)+' 日</div></td><td class="r">'+inp('days',b.days,1)+'</td><td colspan="3"></td></tr>'+
-   '<tr><td>'+ROWN.room+'<div class="lim">每日 '+inp('rate',b.rate,100).replace('<input','<input style="width:84px;min-width:0"')+'</div></td><td class="r num" id="ec-room"></td><td class="r num" id="eg-room"></td><td class="r num" id="ev-room"></td><td class="r num" id="es-room"></td></tr>'+
-   ['surg','anaes','ot','misc'].map(k=>'<tr><td>'+ROWN[k]+'<div class="lim" id="el-'+k+'"></div></td><td class="r">'+inp(k,b[k])+'</td><td class="r num" id="eg-'+k+'"></td><td class="r num" id="ev-'+k+'"></td><td class="r num" id="es-'+k+'"></td></tr>').join('');
+   '<tr><td>住院日數<div class="lim">'+(b.major?'一般住院日數（估計）':'統計平均 '+(Math.round(b.los*10)/10)+' 日')+'</div></td><td class="r">'+inp('days',b.days,1)+'</td><td colspan="3"></td></tr>'+
+   row('room',true)+(showIcu?row('icu',true):'')+['surg','anaes','ot','misc'].map(k=>row(k)).join('')+(showCan?row('cancer'):'');
   update();
 }
 function update(){
   const r=calc();if(!r)return;
-  ['room','surg','anaes','ot','misc'].forEach(k=>{
+  Object.keys(ROWN).forEach(k=>{
     const set=(id,v)=>{const e=$('#'+id);if(e)e.textContent=fmt(v)};
-    if(k==='room')set('ec-room',r.it.room);
+    set('ec-'+k,r.it[k]);
     set('eg-'+k,r.G[k]);set('ev-'+k,r.V[k]);set('es-'+k,Math.max(0,r.it[k]-r.G[k]-r.V[k]));
     const l=$('#el-'+k);if(l)l.textContent='醫保上限 '+(r.L[k]===Infinity?'全數':'$'+fmt(r.L[k]));
   });
@@ -784,7 +840,7 @@ function update(){
   $('#r-bar').innerHTML='<span style="width:'+w(r.gTot)+';background:var(--s3)"></span><span style="width:'+w(r.vFinal)+';background:var(--accent)"></span><span style="width:'+w(r.self)+';background:var(--warn)"></span>';
   $('#r-notes').innerHTML=r.notes.map(n=>'<li>'+esc(n)+'</li>').join('');
   const p=byId[es.ver];
-  const msg='你好 beezy，我用咗 vhiswiki 手術賠償估算：\n計劃：'+(p?(p.t==='N'?'冇自願醫保（'+p.lv+'）':p.co+' '+p.n+'（'+p.lv+'）'):'')+'\n手術：'+pLabel(es.proc)+'\n估計自己要補：HK$'+fmt(r.self)+'\n想了解點樣減少保障缺口。';
+  const msg='你好 beezy，我用咗 vhiswiki 手術賠償估算：\n計劃：'+(p?(p.t==='N'?'冇自願醫保（'+p.lv+'）':p.co+' '+p.n+'（'+p.lv+'）'):'')+'\n治療：'+procName(es.proc)+'\n估計總收費：HK$'+fmt(r.bill)+'\n估計自己要補：HK$'+fmt(r.self)+'\n想了解點樣減少保障缺口。';
   $('#r-wa').href='https://wa.me/85293415321?text='+encodeURIComponent(msg);
 }
 $('#e-q').addEventListener('input',fillFam);
@@ -795,7 +851,7 @@ $('#e-hosp').addEventListener('change',e=>{es.hosp=e.target.value;estimateBill(t
 $('#e-cat').addEventListener('change',e=>{es.cat=e.target.value;update()});
 $('#e-pct').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;es.pct=+b.dataset.v;$$('#e-pct button').forEach(x=>x.setAttribute('aria-pressed',x===b));estimateBill(true)});
 $('#e-reset').addEventListener('click',()=>estimateBill(true));
-$('#e-bill').addEventListener('input',e=>{const k=e.target.dataset.eb;if(!k||!es.bill)return;es.bill[k]=Math.max(0,+e.target.value||0);if(k==='days'||k==='rate'){const c=$('#ec-room');}update()});
+$('#e-bill').addEventListener('input',e=>{const k=e.target.dataset.eb;if(!k||!es.bill)return;es.bill[k]=Math.max(0,+e.target.value||0);update()});
 $('#g-on').addEventListener('change',e=>{$('#g-box').hidden=!e.target.checked;update()});
 $$('#g-box input').forEach(i=>i.addEventListener('input',update));
 (function initEst(){

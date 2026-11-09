@@ -1,0 +1,31 @@
+{
+  "sources": {
+    "cumc": {"name": "中大醫院定價收費（包所有醫生費，4人房；一般＝病情級別1，較貴＝級別3）", "url": "https://www.cuhkmc.hk/tc/fees/price-list/package-fee-for-operation-procedure"},
+    "hkah": {"name": "港安醫院－司徒拔道 通波仔計劃原價（一般＝1個支架，較貴＝2個支架）", "url": "https://www.hkah.org.hk/tc/promotions/percutaneous-coronary-intervention-pci-subsidy-scheme"},
+    "aig": {"name": "AIG 香港：私家醫院搭橋手術約 40 至 60 萬", "url": "https://www.aig.com.hk/zh/campaign-pages/coronary-artery-bypass-surgery"},
+    "bowtie": {"name": "保泰 Bowtie《心瓣手術費用2026》私家醫院參考價", "url": "https://www.bowtie.com.hk/blog/zh/%E4%BF%9D%E9%9A%AA%E7%9F%A5%E8%AD%98/%E8%87%AA%E9%A1%98%E9%86%AB%E4%BF%9D-%E5%8C%85%E5%94%94%E5%8C%85-%E5%BF%83%E7%93%A3%E6%89%8B%E8%A1%93/"},
+    "fwd": {"name": "富衛 FWD《癌症醫療費用》：標靶及免疫治療每月至少 5 萬；放射治療約 5 至 15 萬", "url": "https://www.fwd.com.hk/zh/blog/guide/cancer-treatment-costs/"}
+  },
+  "items": [
+    {"id": "liver1", "g": "癌症手術", "n": "局部肝臟切除術（肝癌）", "src": "cumc", "t": [271000, 542000], "los": 7, "icu": 1, "cat": "complex"},
+    {"id": "liver2", "g": "癌症手術", "n": "腹腔鏡大型肝葉切除術（肝癌）", "src": "cumc", "t": [429500, 859000], "los": 8, "icu": 1, "cat": "complex"},
+    {"id": "panc", "g": "癌症手術", "n": "腹腔鏡遠端胰臟切除術（胰臟癌）", "src": "cumc", "t": [379000, 758000], "los": 9, "icu": 1, "cat": "complex"},
+    {"id": "gast", "g": "癌症手術", "n": "腹腔鏡全胃切除術連淋巴切除（胃癌）", "src": "cumc", "t": [352500, 705000], "los": 9, "icu": 1, "cat": "complex"},
+    {"id": "colon", "g": "癌症手術", "n": "腹腔鏡左側結腸切除術（大腸癌）", "src": "cumc", "t": [259000, 518000], "los": 6, "icu": 0, "cat": "complex"},
+    {"id": "prost", "g": "癌症手術", "n": "機械臂根治性前列腺切除術（前列腺癌）", "src": "cumc", "t": [300920, 601900], "los": 4, "icu": 0, "cat": "complex"},
+    {"id": "blad", "g": "癌症手術", "n": "腹腔鏡根除性膀胱切除術及迴腸導管（膀胱癌）", "src": "cumc", "t": [391000, 782000], "los": 10, "icu": 1, "cat": "complex"},
+    {"id": "breast", "g": "癌症手術", "n": "全乳房切除術及前哨淋巴結活檢（乳癌）", "src": "cumc", "t": [140760, 281600], "los": 3, "icu": 0, "cat": "major"},
+    {"id": "pit", "g": "癌症手術", "n": "內視鏡腦下垂體腫瘤切除術", "src": "cumc", "t": [211000, 422000], "los": 5, "icu": 1, "cat": "complex"},
+    {"id": "pci", "g": "心臟", "n": "通波仔（冠狀動脈介入，1 至 2 個支架）", "src": "hkah", "t": [140000, 160000], "los": 1, "icu": 0, "cat": "major"},
+    {"id": "pace", "g": "心臟", "n": "永久心臟起搏器植入術（起搏器另計）", "src": "cumc", "t": [123500, 154500], "los": 2, "icu": 0, "cat": "major"},
+    {"id": "cabg", "g": "心臟", "n": "冠狀動脈搭橋手術", "src": "aig", "t": [400000, 600000], "los": 8, "icu": 2, "cat": "complex"},
+    {"id": "valve", "g": "心臟", "n": "開胸換心瓣手術", "src": "bowtie", "t": [400000, 800000], "los": 9, "icu": 2, "cat": "complex"},
+    {"id": "tavi", "g": "心臟", "n": "經導管主動脈瓣植入術（TAVI）", "src": "bowtie", "t": [500000, 800000], "los": 4, "icu": 1, "cat": "complex"},
+    {"id": "tkr", "g": "其他大型手術", "n": "全人工膝關節置換術（單側）", "src": "cumc", "t": [161000, 322000], "los": 5, "icu": 0, "cat": "major"},
+    {"id": "target", "g": "癌症藥物及電療", "n": "標靶或免疫治療一年（每月約 5 萬）", "src": "fwd", "drug": [600000, 600000]},
+    {"id": "radio", "g": "癌症藥物及電療", "n": "放射治療一個療程", "src": "fwd", "drug": [50000, 150000]},
+    {"id": "c_colon", "g": "一年治療組合", "n": "大腸癌一年：結腸切除 + 標靶治療一年", "parts": ["colon", "target"]},
+    {"id": "c_liver", "g": "一年治療組合", "n": "肝癌一年：大型肝葉切除 + 標靶／免疫治療一年", "parts": ["liver2", "target"]},
+    {"id": "c_breast", "g": "一年治療組合", "n": "乳癌一年：乳房切除 + 放射治療 + 標靶治療一年", "parts": ["breast", "radio", "target"]}
+  ]
+}
