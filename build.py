@@ -144,7 +144,14 @@ def build_data():
         "latest": max(o["pd"] for o in out),
     }
     print("整理完成：", meta, f"（{missing} 個版本搵唔到保費，已略過）")
-    return {"meta": meta, "plans": out}
+    extra = {}
+    for key, fn in [("ben", "benefits.json"), ("surg", "surgery-bills.json")]:
+        f = ROOT / "data" / fn
+        extra[key] = json.loads(f.read_text("utf-8")) if f.exists() else ({} if key == "ben" else [])
+    if isinstance(extra["ben"], dict):
+        extra["ben"] = {k: v for k, v in extra["ben"].items() if not k.startswith("_")}
+    print(f"保障上限：{len(extra['ben'])} 個版本；手術統計：{len(extra['surg'])} 行")
+    return {"meta": meta, "plans": out, **extra}
 
 
 # ---------- 砌網頁 ----------

@@ -27,3 +27,12 @@ GitHub 每日香港時間早上 9:17 會自動：
 | `CNAME` | （有自己域名時先加）域名名稱，例如 `vhiswiki.com` |
 
 數據來源：[DATA.GOV.HK](https://data.gov.hk/tc-data/dataset/hk-hhb-hhbvhis-vhis-standard-premium)。
+
+## 手術賠償估算用嘅數據
+
+| 檔案 | 內容 | 點樣更新 |
+| --- | --- | --- |
+| `data/benefits.json` | 437 個靈活計劃版本嘅賠償上限（房租、雜費、手術費、麻醉、手術室、額外醫療、年度上限），由官方計劃文件整理並逐項核對 | 計劃改條款時：喺 Actions 執行「下載計劃文件」，再請 Claude 重新整理 |
+| `data/surgery-bills.json` | 13 間私家醫院 30 種常見手術嘅 2025 年歷史賬單統計（醫生費、醫院費、總額中位數及第 90 百分值、住院日數） | 每年醫院公布新數據後，用 `tools/research_orphf.py` 同 `tools/parse_orphf.py` 更新 |
+
+標準計劃一律用法定標準計劃上限計算。
