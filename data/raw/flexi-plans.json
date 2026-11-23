@@ -1364,8 +1364,8 @@
           "product-id": "F00081-02-000-01-001",
           "plan-level": {
             "en": "HKD8,800 Deductible",
-            "zh-hk": "8,800港元自付費",
-            "zh-cn": "8,800港元自付费"
+            "zh-hk": "8,800 港元自付費",
+            "zh-cn": "8,800 港元自付费"
           },
           "currency": "HKD",
           "plan-doc-url": {
@@ -1391,8 +1391,8 @@
           "product-id": "F00081-03-000-01-001",
           "plan-level": {
             "en": "HKD18,000 Deductible",
-            "zh-hk": "18,000港元自付費",
-            "zh-cn": "18,000港元自付费"
+            "zh-hk": "18,000 港元自付費",
+            "zh-cn": "18,000 港元自付费"
           },
           "currency": "HKD",
           "plan-doc-url": {
@@ -7294,9 +7294,9 @@
         "zh-cn": "周大福人寿保险有限公司"
       },
       "plan-date": {
-        "en": "23 November 2025",
-        "zh-hk": "2025年11月23日",
-        "zh-cn": "2025年11月23日"
+        "en": "23 November 2026",
+        "zh-hk": "2026年11月23日",
+        "zh-cn": "2026年11月23日"
       },
       "earliest-plan-date": {
         "en": "1 April 2019",
@@ -7306,7 +7306,7 @@
       "plan-info-certified": [
         {
           "certification-no": "F00021-01-000-03",
-          "product-id": "F00021-01-000-03-003",
+          "product-id": "F00021-01-000-03-004",
           "plan-level": {
             "en": "Benefit Level 1 with SMM (HKD)",
             "zh-hk": "保障級別 1+超額醫療保障 (港元)",
@@ -7329,11 +7329,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00021/F00021-01-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "Y",
-          "parent-product-id": "F00021-01-000-03-002"
+          "parent-product-id": "F00021-01-000-03-003"
         },
         {
           "certification-no": "F00021-02-000-03",
-          "product-id": "F00021-02-000-03-003",
+          "product-id": "F00021-02-000-03-004",
           "plan-level": {
             "en": "Benefit Level 2 with SMM (HKD)",
             "zh-hk": "保障級別 2+超額醫療保障 (港元)",
@@ -7356,11 +7356,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00021/F00021-02-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "Y",
-          "parent-product-id": "F00021-02-000-03-002"
+          "parent-product-id": "F00021-02-000-03-003"
         },
         {
           "certification-no": "F00021-03-000-03",
-          "product-id": "F00021-03-000-03-003",
+          "product-id": "F00021-03-000-03-004",
           "plan-level": {
             "en": "Benefit Level 3 with SMM (HKD)",
             "zh-hk": "保障級別 3+超額醫療保障 (港元)",
@@ -7383,11 +7383,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00021/F00021-03-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "Y",
-          "parent-product-id": "F00021-03-000-03-002"
+          "parent-product-id": "F00021-03-000-03-003"
         },
         {
           "certification-no": "F00021-04-000-03",
-          "product-id": "F00021-04-000-03-003",
+          "product-id": "F00021-04-000-03-004",
           "plan-level": {
             "en": "Benefit Level 1 with SMM (USD)",
             "zh-hk": "保障級別 1+超額醫療保障 (美元)",
@@ -7410,11 +7410,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00021/F00021-04-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "Y",
-          "parent-product-id": "F00021-04-000-03-002"
+          "parent-product-id": "F00021-04-000-03-003"
         },
         {
           "certification-no": "F00021-05-000-03",
-          "product-id": "F00021-05-000-03-003",
+          "product-id": "F00021-05-000-03-004",
           "plan-level": {
             "en": "Benefit Level 2 with SMM (USD)",
             "zh-hk": "保障級別 2+超額醫療保障 (美元)",
@@ -7437,11 +7437,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00021/F00021-05-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "Y",
-          "parent-product-id": "F00021-05-000-03-002"
+          "parent-product-id": "F00021-05-000-03-003"
         },
         {
           "certification-no": "F00021-06-000-03",
-          "product-id": "F00021-06-000-03-003",
+          "product-id": "F00021-06-000-03-004",
           "plan-level": {
             "en": "Benefit Level 3 with SMM (USD)",
             "zh-hk": "保障級別 3+超額醫療保障 (美元)",
@@ -7464,7 +7464,7 @@
             "zh-cn": "/doc/certifiedplan/fp/F00021/F00021-06-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "Y",
-          "parent-product-id": "F00021-06-000-03-002"
+          "parent-product-id": "F00021-06-000-03-003"
         }
       ],
       "has-other-info": "",
@@ -7484,7 +7484,7 @@
       "remarks": {
         "en": "(For renewal of existing policies only)",
         "zh-hk": "(只供現有保單續保)",
-        "zh-cn": "(只供现有保单续保)\n"
+        "zh-cn": "(只供现有保单续保)"
       },
       "renewal-only": "Y",
       "de-reg": "",
@@ -7492,7 +7492,7 @@
     },
     {
       "plan-name": {
-        "en": "''ChampCare'' Medical Insurance Plan",
+        "en": "\"ChampCare\" Medical Insurance Plan",
         "zh-hk": "「逸康保」醫療保障計劃",
         "zh-cn": "「逸康保」医疗保障计划"
       },
@@ -7926,9 +7926,9 @@
         "zh-cn": "周大福人寿保险有限公司"
       },
       "plan-date": {
-        "en": "23 November 2025",
-        "zh-hk": "2025年11月23日",
-        "zh-cn": "2025年11月23日"
+        "en": "23 November 2026",
+        "zh-hk": "2026年11月23日",
+        "zh-cn": "2026年11月23日"
       },
       "earliest-plan-date": {
         "en": "16 May 2022",
@@ -7938,7 +7938,7 @@
       "plan-info-certified": [
         {
           "certification-no": "F00064-01-000-02",
-          "product-id": "F00064-01-000-02-003",
+          "product-id": "F00064-01-000-02-004",
           "plan-level": {
             "en": "Benefit Level 1 (HKD)",
             "zh-hk": "保障級別1 (港元)",
@@ -7961,11 +7961,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00064/F00064-01-000-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00064-01-000-02-002"
+          "parent-product-id": "F00064-01-000-02-003"
         },
         {
           "certification-no": "F00064-02-000-02",
-          "product-id": "F00064-02-000-02-003",
+          "product-id": "F00064-02-000-02-004",
           "plan-level": {
             "en": "Benefit Level 2 (HKD)",
             "zh-hk": "保障級別2 (港元)",
@@ -7988,11 +7988,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00064/F00064-02-000-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00064-02-000-02-002"
+          "parent-product-id": "F00064-02-000-02-003"
         },
         {
           "certification-no": "F00064-03-000-02",
-          "product-id": "F00064-03-000-02-003",
+          "product-id": "F00064-03-000-02-004",
           "plan-level": {
             "en": "Benefit Level 1 (USD)",
             "zh-hk": "保障級別1 (美元)",
@@ -8015,11 +8015,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00064/F00064-03-000-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00064-03-000-02-002"
+          "parent-product-id": "F00064-03-000-02-003"
         },
         {
           "certification-no": "F00064-04-000-02",
-          "product-id": "F00064-04-000-02-003",
+          "product-id": "F00064-04-000-02-004",
           "plan-level": {
             "en": "Benefit Level 2 (USD)",
             "zh-hk": "保障級別2 (美元)",
@@ -8042,7 +8042,7 @@
             "zh-cn": "/doc/certifiedplan/fp/F00064/F00064-04-000-02-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00064-04-000-02-002"
+          "parent-product-id": "F00064-04-000-02-003"
         }
       ],
       "has-other-info": "",
@@ -8080,9 +8080,9 @@
         "zh-cn": "周大福人寿保险有限公司"
       },
       "plan-date": {
-        "en": "23 November 2025",
-        "zh-hk": "2025年11月23日",
-        "zh-cn": "2025年11月23日"
+        "en": "23 November 2026",
+        "zh-hk": "2026年11月23日",
+        "zh-cn": "2026年11月23日"
       },
       "earliest-plan-date": {
         "en": "30 August 2019",
@@ -8092,7 +8092,7 @@
       "plan-info-certified": [
         {
           "certification-no": "F00037-01-000-03",
-          "product-id": "F00037-01-000-03-003",
+          "product-id": "F00037-01-000-03-004",
           "plan-level": {
             "en": "Benefit Level 1 with SMM (HKD)",
             "zh-hk": "保障級別 1+超額醫療保障 (港元)",
@@ -8115,11 +8115,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00037/F00037-01-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00037-01-000-03-002"
+          "parent-product-id": "F00037-01-000-03-003"
         },
         {
           "certification-no": "F00037-02-000-03",
-          "product-id": "F00037-02-000-03-003",
+          "product-id": "F00037-02-000-03-004",
           "plan-level": {
             "en": "Benefit Level 2 with SMM (HKD)",
             "zh-hk": "保障級別 2+超額醫療保障 (港元)",
@@ -8142,11 +8142,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00037/F00037-02-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00037-02-000-03-002"
+          "parent-product-id": "F00037-02-000-03-003"
         },
         {
           "certification-no": "F00037-03-000-03",
-          "product-id": "F00037-03-000-03-003",
+          "product-id": "F00037-03-000-03-004",
           "plan-level": {
             "en": "Benefit Level 3 with SMM (HKD)",
             "zh-hk": "保障級別 3+超額醫療保障 (港元)",
@@ -8169,11 +8169,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00037/F00037-03-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00037-03-000-03-002"
+          "parent-product-id": "F00037-03-000-03-003"
         },
         {
           "certification-no": "F00037-04-000-03",
-          "product-id": "F00037-04-000-03-003",
+          "product-id": "F00037-04-000-03-004",
           "plan-level": {
             "en": "Benefit Level 4 with SMM (HKD)",
             "zh-hk": "保障級別 4+超額醫療保障 (港元)",
@@ -8196,11 +8196,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00037/F00037-04-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00037-04-000-03-002"
+          "parent-product-id": "F00037-04-000-03-003"
         },
         {
           "certification-no": "F00037-05-000-03",
-          "product-id": "F00037-05-000-03-003",
+          "product-id": "F00037-05-000-03-004",
           "plan-level": {
             "en": "Benefit Level 1 with SMM (USD)",
             "zh-hk": "保障級別 1+超額醫療保障 (美元)",
@@ -8223,11 +8223,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00037/F00037-05-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00037-05-000-03-002"
+          "parent-product-id": "F00037-05-000-03-003"
         },
         {
           "certification-no": "F00037-06-000-03",
-          "product-id": "F00037-06-000-03-003",
+          "product-id": "F00037-06-000-03-004",
           "plan-level": {
             "en": "Benefit Level 2 with SMM (USD)",
             "zh-hk": "保障級別 2+超額醫療保障 (美元)",
@@ -8250,11 +8250,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00037/F00037-06-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00037-06-000-03-002"
+          "parent-product-id": "F00037-06-000-03-003"
         },
         {
           "certification-no": "F00037-07-000-03",
-          "product-id": "F00037-07-000-03-003",
+          "product-id": "F00037-07-000-03-004",
           "plan-level": {
             "en": "Benefit Level 3 with SMM (USD)",
             "zh-hk": "保障級別 3+超額醫療保障 (美元)",
@@ -8277,11 +8277,11 @@
             "zh-cn": "/doc/certifiedplan/fp/F00037/F00037-07-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00037-07-000-03-002"
+          "parent-product-id": "F00037-07-000-03-003"
         },
         {
           "certification-no": "F00037-08-000-03",
-          "product-id": "F00037-08-000-03-003",
+          "product-id": "F00037-08-000-03-004",
           "plan-level": {
             "en": "Benefit Level 4 with SMM (USD)",
             "zh-hk": "保障級別 4+超額醫療保障 (美元)",
@@ -8304,7 +8304,7 @@
             "zh-cn": "/doc/certifiedplan/fp/F00037/F00037-08-000-03-StandardPremium-Bilingual.pdf"
           },
           "renewal-only": "",
-          "parent-product-id": "F00037-08-000-03-002"
+          "parent-product-id": "F00037-08-000-03-003"
         }
       ],
       "has-other-info": "",
@@ -8731,33 +8731,6 @@
           "parent-product-id": "F00027-07-001-03-003"
         },
         {
-          "certification-no": "F00027-08-000-03",
-          "product-id": "F00027-08-000-03-004",
-          "plan-level": {
-            "en": "Private (USD)",
-            "zh-hk": "私家(美元)",
-            "zh-cn": "私家(美元)"
-          },
-          "currency": "USD",
-          "plan-doc-url": {
-            "en": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-PlanDoc-e.pdf",
-            "zh-hk": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-PlanDoc-c.pdf",
-            "zh-cn": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-PlanDoc-c.pdf"
-          },
-          "premium": {
-            "en": "Standard Premium",
-            "zh-hk": "標準保費",
-            "zh-cn": "标准保费"
-          },
-          "premium-doc-url": {
-            "en": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-StandardPremium-Bilingual.pdf",
-            "zh-hk": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-StandardPremium-Bilingual.pdf",
-            "zh-cn": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-StandardPremium-Bilingual.pdf"
-          },
-          "renewal-only": "",
-          "parent-product-id": "F00027-08-000-03-003"
-        },
-        {
           "certification-no": "F00027-08-001-03",
           "product-id": "F00027-08-001-03-004",
           "plan-level": {
@@ -8783,6 +8756,33 @@
           },
           "renewal-only": "",
           "parent-product-id": "F00027-08-001-03-003"
+        },
+        {
+          "certification-no": "F00027-08-000-03",
+          "product-id": "F00027-08-000-03-004",
+          "plan-level": {
+            "en": "Private (USD)",
+            "zh-hk": "私家(美元)",
+            "zh-cn": "私家(美元)"
+          },
+          "currency": "USD",
+          "plan-doc-url": {
+            "en": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-PlanDoc-e.pdf",
+            "zh-hk": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-PlanDoc-c.pdf",
+            "zh-cn": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-PlanDoc-c.pdf"
+          },
+          "premium": {
+            "en": "Standard Premium",
+            "zh-hk": "標準保費",
+            "zh-cn": "标准保费"
+          },
+          "premium-doc-url": {
+            "en": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-StandardPremium-Bilingual.pdf",
+            "zh-hk": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-StandardPremium-Bilingual.pdf",
+            "zh-cn": "/doc/certifiedplan/fp/F00027/F00027-08-000-03-StandardPremium-Bilingual.pdf"
+          },
+          "renewal-only": "",
+          "parent-product-id": "F00027-08-000-03-003"
         }
       ],
       "has-other-info": "",

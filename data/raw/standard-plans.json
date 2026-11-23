@@ -1164,9 +1164,9 @@
         "zh-cn": "周大福人寿保险有限公司"
       },
       "plan-date": {
-        "en": "23 November 2025",
-        "zh-hk": "2025年11月23日",
-        "zh-cn": "2025年11月23日"
+        "en": "23 November 2026",
+        "zh-hk": "2026年11月23日",
+        "zh-cn": "2026年11月23日"
       },
       "earliest-plan-date": {
         "en": "1 April 2019",
@@ -1176,7 +1176,7 @@
       "plan-info-certified": [
         {
           "certification-no": "S00028-01-000-03",
-          "product-id": "S00028-01-000-03-003",
+          "product-id": "S00028-01-000-03-004",
           "plan-level": {
             "en": "Standard Plan",
             "zh-hk": "標準計劃",
@@ -1198,7 +1198,7 @@
             "zh-hk": "/doc/certifiedplan/sp/S00028/S00028-01-000-03-StandardPremium-Bilingual.pdf",
             "zh-cn": "/doc/certifiedplan/sp/S00028/S00028-01-000-03-StandardPremium-Bilingual.pdf"
           },
-          "parent-product-id": "S00028-01-000-03-002"
+          "parent-product-id": "S00028-01-000-03-003"
         }
       ],
       "has-other-info": "",
@@ -1392,7 +1392,7 @@
       "plan-info-certified": [
         {
           "certification-no": "S00031-01-000-02",
-          "product-id": "S00031-01-000-02-006",
+          "product-id": "S00031-01-000-02-007",
           "plan-level": {
             "en": "Standard Plan",
             "zh-hk": "標準計劃",
@@ -1414,7 +1414,7 @@
             "zh-hk": "/doc/certifiedplan/sp/S00031/S00031-01-000-02-StandardPremium-Bilingual.pdf",
             "zh-cn": "/doc/certifiedplan/sp/S00031/S00031-01-000-02-StandardPremium-Bilingual.pdf"
           },
-          "parent-product-id": "S00031-01-000-02-005"
+          "parent-product-id": "S00031-01-000-02-006"
         }
       ],
       "has-other-info": "",
